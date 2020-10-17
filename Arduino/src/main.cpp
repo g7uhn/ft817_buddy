@@ -46,8 +46,6 @@ int backlight = 8;    // backlight output pin (not the "LIGHT" input button!)
 // Global variables - g7uhn TO DO: Needs a big tidy up here
 bool sw8status = 1;   // using pullup, pressing button takes this low
 bool sw9status = 1;   // using pullup, pressing button takes this low
-//int i;
-//boolean dataValid = true;
 long freq;
 String mode;
 byte modeByte;
@@ -57,15 +55,8 @@ int buttonStatus = 0;
 int button = 0;
 boolean splitState = false;
 byte sMeter;
-//byte targetByte;
-//byte byteAbove;
-//byte targetByteReceived[3];
-//byte byteAboveReceived[3];
-//byte command[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
 byte currentBand;
 int currentVfo;
-//boolean currentNar;
-//boolean requestedNar;
 byte MSB;
 byte LSB;
 byte returnedByte;
@@ -305,19 +296,6 @@ void toggleVfo()
 }
 
 
-// void toggleSplit() {
-//   // USER FUNCTION: Split operation (toggle)
-//   if (splitState == false) {
-//     radioCAT.split(true);  // set SPL to true
-//     splitState = true;  // set splitState to true
-//   }
-//   else {
-//     radioCAT.split(false);  // set SPL to false
-//     splitState = false;  // set splitState to false
-//   }
-//   // END OF USER FUNCTION
-// }
-
 
 void toggleNar() 
 {
@@ -393,7 +371,6 @@ void displayABCkeys()
       break;
   }
 }
-
 
 
 
