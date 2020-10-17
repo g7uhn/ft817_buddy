@@ -34,16 +34,17 @@
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
-FT817 radio;           // define “radio” so that we may pass CAT and EEPROM commands
+FT817 radio;              // define “radio” so that we may pass CAT and EEPROM commands
 
 // Define PCB pins
-int buttonPin = A0;   // SW1-SW6 arrive as different levels on analog input A0
-int sw7 = 5;          // SW7 input is D5
-int sw8 = 10;         // SW8 input is D10
-int sw9 = 9;          // SW9 input is D9
-int backlight = 8;    // backlight output pin (not the "LIGHT" input button!)
+int backlightPin = 8;     // backlight output pin (not the "LIGHT" input button!)
+int buttonPin = A0;       // SW1-SW6 arrive as different levels on analog input A0
+int sw7pin = 2;           // SW7 input is D2
+int sw8pin = 10;          // SW8 input is D10
+int sw9pin = 9;           // SW9 input is D9
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
+bool sw7status = 1;   // using pullup, pressing button takes this low
 bool sw8status = 1;   // using pullup, pressing button takes this low
 bool sw9status = 1;   // using pullup, pressing button takes this low
 long freq;
@@ -51,8 +52,8 @@ String mode;
 byte modeByte;
 byte modeBase;    // used for the radio to return to this mode after generating Tune signal... needed to accomodate the CW/CWR/DIG NAR codes
 byte modeReturn;
-int buttonStatus = 0;
-int button = 0;
+int buttonStatus = 0;   // analog value of buttonPin...
+int button = 0;         // ...button number
 boolean splitState = false;
 byte sMeter;
 byte currentBand;
@@ -60,16 +61,55 @@ int currentVfo;
 byte MSB;
 byte LSB;
 byte returnedByte;
+// New variables for soft-key pages and soft-key status
+int currentPage = 1;    // initialise at the last page
+//char page0SoftkeyLabel[6];
+//char page1SoftkeyLabel[6];
+boolean softkeyStatus[6];
 
-//Forward declaration of functions (required for PlatformIO)
+// Forward declaration of functions (required for PlatformIO)
 void displayABCkeys();
 void getReadableMode();
+void backlight();
+void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
 void toggleNar();
 void toggleIpo();
 void toggleBreakIn();
 void toggleKeyer();
+
+// Page0 items
+// 
+String page0SoftkeyLabel1 = "TUNon ";
+void page0SoftkeyFunction1() {tuneSignalOn();}
+String page0SoftkeyLabel2 = "IPO";
+void page0SoftkeyFunction2() {toggleIpo();}
+String page0SoftkeyLabel3 = "KYR";
+void page0SoftkeyFunction3() {toggleKeyer();}
+String page0SoftkeyLabel4 = "TUNoff";
+void page0SoftkeyFunction4() {tuneSignalOff();}
+String page0SoftkeyLabel5 = " BK";
+void page0SoftkeyFunction5() {toggleBreakIn();}
+String page0SoftkeyLabel6 = "NAR";
+void page0SoftkeyFunction6() {toggleNar();}
+
+// Page1 items
+// 
+String page1SoftkeyLabel1 = "NAR  ";
+void page1SoftkeyFunction1() {toggleNar();}
+String page1SoftkeyLabel2 = "NAR";
+void page1SoftkeyFunction2() {toggleNar();}
+String page1SoftkeyLabel3 = "NAR";
+void page1SoftkeyFunction3() {toggleNar();}
+String page1SoftkeyLabel4 = "  NAR";
+void page1SoftkeyFunction4() {toggleNar();}
+String page1SoftkeyLabel5 = "NAR";
+void page1SoftkeyFunction5() {toggleNar();}
+String page1SoftkeyLabel6 = "NAR";
+void page1SoftkeyFunction6() {toggleNar();}
+
+
 
 void setup(void) 
 {
@@ -78,10 +118,10 @@ void setup(void)
   radio.begin(9600);        // start the serial port for the CAT library
 
   // Set up some pins
-  pinMode(backlight, OUTPUT);
-  pinMode(sw7, INPUT_PULLUP);
-  pinMode(sw8, INPUT_PULLUP);
-  pinMode(sw9, INPUT_PULLUP);
+  pinMode(backlightPin, OUTPUT);
+  pinMode(sw7pin, INPUT_PULLUP);
+  pinMode(sw8pin, INPUT_PULLUP);
+  pinMode(sw9pin, INPUT_PULLUP);
 
   // Initialize Display
   display.begin();
@@ -113,32 +153,8 @@ void setup(void)
   // Display the FT-817 soft-keys (A,B,C)    g7uhn TO DO: move this into a periodic check of radio status along with SW1-6 status indications
   displayABCkeys();
   
-  // Label the soft keys
-  // may update this when I implement multiple pages of soft-keys...
-  //Button 1
-  display.setCursor(0, 0);
-  display.setTextSize(1);
-  display.print("TUNon");
-  //Button 2
-  display.setCursor(0, 11);
-  display.setTextSize(1);
-  display.print("IPO");
-  //Button 3
-  display.setCursor(0, 22);
-  display.setTextSize(1);
-  display.print("KYR");
-  //Button 4
-  display.setCursor(48, 0);
-  display.setTextSize(1);
-  display.print("TUNoff");
-  //Button 5
-  display.setCursor(66, 11);
-  display.setTextSize(1);
-  display.print(" BK");
-  //Button 6
-  display.setCursor(66, 22);
-  display.setTextSize(1);
-  display.print("NAR");
+  // Display the soft keys by calling changePage()
+  changePage();
 
   // write to display
   display.display();
@@ -148,15 +164,6 @@ void setup(void)
 
 void loop() 
 {
-  // Very rough backlight function (blocking)     g7uhn TO DO: make a better (non-blocking) backlight
-  sw8status = digitalRead(sw8);
-  if (sw8status == LOW)
-  {
-    digitalWrite(backlight, 1);
-    delay(5000);                  // Backlight on for 5s
-    digitalWrite(backlight, 0);
-  }
-
   // Get frequency
   freq = radio.getFreqMode(); //freq is a long integer of 10's of Hz
   int MHz = freq / 100000;
@@ -167,36 +174,52 @@ void loop()
   getReadableMode();
 
 
-
 //  // Get Receiver status (S-meter)
 //  byte rxStatusCmd[5] = {0x00, 0x00, 0x00, 0x00, 0xe7};
 //  radioCAT.sendCmd(rxStatusCmd, 5);
 //  sMeter = radioCAT.getByte();
 //  sMeter = sMeter << 4; //left shift the bits by 4 to make this an S-meter byte ranging from 00000000 to 11110000
 
+  if (currentPage == 0)
+  {
+    if (button == 0) {}
+    else if (button == 1) { page0SoftkeyFunction1(); }
+    else if (button == 2) { page0SoftkeyFunction2(); }
+    else if (button == 3) { page0SoftkeyFunction3(); }
+    else if (button == 4) { page0SoftkeyFunction4(); }
+    else if (button == 5) { page0SoftkeyFunction5(); }
+    else if (button == 6) { page0SoftkeyFunction6(); }
+    button = 0;  // reset button variable to zero once we've used it
+  }
+  else if (currentPage == 1)
+  {
+    if (button == 0) {}
+    else if (button == 1) { page1SoftkeyFunction1(); }
+    else if (button == 2) { page1SoftkeyFunction2(); }
+    else if (button == 3) { page1SoftkeyFunction3(); }
+    else if (button == 4) { page1SoftkeyFunction4(); }
+    else if (button == 5) { page1SoftkeyFunction5(); }
+    else if (button == 6) { page1SoftkeyFunction6(); }
+    button = 0;  // reset button variable to zero once we've used it
+  }
 
+  if (sw7status == LOW)
+  {
+    changePage();
+    delay(300);         // delay prevents series of rapid page changes 
+    sw7status = HIGH;   // reset sw7status to high once we've used it
+    //debugging, print currentPage
+    display.setCursor(25, 12);
+    display.setTextSize(1);
+    display.setTextColor(BLACK, WHITE);
+    display.print(currentPage);
+  }
 
-  if (button == 0) {
+  if (sw8status == LOW)
+  {
+    backlight();
   }
-  else if (button == 1) {
-    tuneSignalOn();
-  }
-  else if (button == 2) {
-    toggleIpo();
-  }
-  else if (button == 3) {
-    toggleKeyer();
-  }
-  else if (button == 4) {
-    tuneSignalOff();
-  }
-  else if (button == 5) {
-    toggleBreakIn();
-  }
-  else if (button == 6) {
-    toggleNar();
-  }
-  button = 0;  // reset button variable to zero once we've used it
+
 
   // STATUS DISPLAY ITEMS
 
@@ -234,7 +257,7 @@ void loop()
 }  // end of main loop
 
 
-// Interrupt code
+// Interrupt code reading buttons at 50Hz
 ISR(TIMER1_COMPA_vect) 
 { //change the 0 to 1 for timer1 and 2 for timer2
   // Get button status (levels determined by resistor network)
@@ -257,8 +280,82 @@ ISR(TIMER1_COMPA_vect)
   else if (buttonStatus < 900) {
     button = 6;
   }
+
+  bool sw7 = digitalRead(sw7pin);
+  if (!sw7)
+  {
+    sw7status = LOW;
+  }
+
+  sw8status = digitalRead(sw8pin);
+  sw9status = digitalRead(sw9pin);
 }
 
+
+// Cycle through soft-key pages
+void changePage()
+{
+  currentPage = ++currentPage % 2;  // 2 pages
+  // Label the soft keys
+  // may update this when I implement multiple pages of soft-keys...
+  if (currentPage == 0)
+  {
+    display.setTextSize(1);
+    //Button 1
+    display.setCursor(0, 0);
+    display.print(page0SoftkeyLabel1);
+    //Button 2
+    display.setCursor(0, 11);
+    display.print(page0SoftkeyLabel2);
+    //Button 3
+    display.setCursor(0, 22);
+    display.print(page0SoftkeyLabel3);
+    //Button 4
+    display.setCursor(48, 0);
+    display.print(page0SoftkeyLabel4);
+    //Button 5
+    display.setCursor(66, 11);
+    display.print(page0SoftkeyLabel5);
+    //Button 6
+    display.setCursor(66, 22);
+    display.print(page0SoftkeyLabel6);
+    // write to display
+    display.display();
+  }
+  else if (currentPage ==1)
+  {
+    display.setTextSize(1);
+    //Button 1
+    display.setCursor(0, 0);
+    display.print(page1SoftkeyLabel1);
+    //Button 2
+    display.setCursor(0, 11);
+    display.print(page1SoftkeyLabel2);
+    //Button 3
+    display.setCursor(0, 22);
+    display.print(page1SoftkeyLabel3);
+    //Button 4
+    display.setCursor(48, 0);
+    display.print(page1SoftkeyLabel4);
+    //Button 5
+    display.setCursor(66, 11);
+    display.print(page1SoftkeyLabel5);
+    //Button 6
+    display.setCursor(66, 22);
+    display.print(page1SoftkeyLabel6);
+    // write to display
+    display.display();
+  }
+}
+
+
+// Very rough backlight function (blocking)     g7uhn TO DO: make a better (non-blocking) backlight
+void backlight()
+{
+  digitalWrite(backlightPin, 1);
+  delay(5000);                  // Backlight on for 5s
+  digitalWrite(backlightPin, 0);
+}
 
 
 // USER FUNCTIONS
@@ -266,7 +363,7 @@ ISR(TIMER1_COMPA_vect)
 
 void tuneSignalOn() 
 {
-  sw9status = digitalRead(sw9);
+  sw9status = digitalRead(sw9pin);
   if (sw9status == LOW)     // is SHIFT key held down? (safety measure)
   {
     // Store current operating base mode i.e. ignoring the NAR mode codes
@@ -430,6 +527,6 @@ void getReadableMode() {
     modeBase = modeByte;
   }
   else {
-    char mode[] = "??";
+    mode = "???";
   }
 }
