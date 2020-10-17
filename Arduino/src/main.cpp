@@ -74,11 +74,6 @@ void backlight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
-void toggleNar();
-void toggleIpo();
-void toggleBreakIn();
-void toggleKeyer();
-void toggleRfSql();
 
 
 // SETUP SOFT-KEY PAGES
@@ -108,13 +103,13 @@ void page1SoftkeyFunction1() {radio.toggleRfSql();}
 String page1SoftkeyLabel2 = "A/B";              // 3 characters
 void page1SoftkeyFunction2() {radio.toggleVFO();}
 String page1SoftkeyLabel3 = "NAR";              // 3 characters
-void page1SoftkeyFunction3() {toggleNar();}
+void page1SoftkeyFunction3() {radio.toggleNar();}
 String page1SoftkeyLabel4 = "   NAR";           // 6 characters
-void page1SoftkeyFunction4() {toggleNar();}
+void page1SoftkeyFunction4() {radio.toggleNar();}
 String page1SoftkeyLabel5 = "NAR";              // 3 characters
-void page1SoftkeyFunction5() {toggleNar();}
+void page1SoftkeyFunction5() {radio.toggleNar();}
 String page1SoftkeyLabel6 = "NAR";              // 3 characters
-void page1SoftkeyFunction6() {toggleNar();}
+void page1SoftkeyFunction6() {radio.toggleNar();}
 
 
 
@@ -215,11 +210,6 @@ void loop()
     changePage();
     delay(300);         // delay prevents series of rapid page changes 
     sw7status = HIGH;   // reset sw7status to high once we've used it
-    //debugging, print currentPage
-    display.setCursor(25, 12);
-    display.setTextSize(1);
-    display.setTextColor(BLACK, WHITE);
-    display.print(currentPage);
   }
 
   if (sw8status == LOW)
