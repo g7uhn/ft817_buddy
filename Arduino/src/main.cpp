@@ -78,35 +78,42 @@ void toggleNar();
 void toggleIpo();
 void toggleBreakIn();
 void toggleKeyer();
+void toggleRfSql();
+
+
+// SETUP SOFT-KEY PAGES
+// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
+// or, if the desired function is a combination of actions, define a function in the USER FUNCTIONS section below
+// to be called by the sketch.  Don't forget to forward declare your user function above.
 
 // Page0 items
-// 
-String page0SoftkeyLabel1 = "TUNon ";
+ 
+String page0SoftkeyLabel1 = "TUNon ";           // 6 characters
 void page0SoftkeyFunction1() {tuneSignalOn();}
-String page0SoftkeyLabel2 = "IPO";
-void page0SoftkeyFunction2() {toggleIpo();}
-String page0SoftkeyLabel3 = "KYR";
-void page0SoftkeyFunction3() {toggleKeyer();}
-String page0SoftkeyLabel4 = "TUNoff";
+String page0SoftkeyLabel2 = "IPO";              // 3 characters
+void page0SoftkeyFunction2() {radio.toggleIPO();}
+String page0SoftkeyLabel3 = "KYR";              // 3 characters
+void page0SoftkeyFunction3() {radio.toggleKeyer();}
+String page0SoftkeyLabel4 = "TUNoff";           // 6 characters
 void page0SoftkeyFunction4() {tuneSignalOff();}
-String page0SoftkeyLabel5 = " BK";
-void page0SoftkeyFunction5() {toggleBreakIn();}
-String page0SoftkeyLabel6 = "NAR";
-void page0SoftkeyFunction6() {toggleNar();}
+String page0SoftkeyLabel5 = " BK";              // 3 characters
+void page0SoftkeyFunction5() {radio.toggleBreakIn();}
+String page0SoftkeyLabel6 = "NAR";              // 3 characters
+void page0SoftkeyFunction6() {radio.toggleNar();}
 
 // Page1 items
-// 
-String page1SoftkeyLabel1 = "NAR  ";
-void page1SoftkeyFunction1() {toggleNar();}
-String page1SoftkeyLabel2 = "NAR";
-void page1SoftkeyFunction2() {toggleNar();}
-String page1SoftkeyLabel3 = "NAR";
+
+String page1SoftkeyLabel1 = "RF/SQL";           // 6 characters
+void page1SoftkeyFunction1() {radio.toggleRfSql();}
+String page1SoftkeyLabel2 = "A/B";              // 3 characters
+void page1SoftkeyFunction2() {radio.toggleVFO();}
+String page1SoftkeyLabel3 = "NAR";              // 3 characters
 void page1SoftkeyFunction3() {toggleNar();}
-String page1SoftkeyLabel4 = "  NAR";
+String page1SoftkeyLabel4 = "   NAR";           // 6 characters
 void page1SoftkeyFunction4() {toggleNar();}
-String page1SoftkeyLabel5 = "NAR";
+String page1SoftkeyLabel5 = "NAR";              // 3 characters
 void page1SoftkeyFunction5() {toggleNar();}
-String page1SoftkeyLabel6 = "NAR";
+String page1SoftkeyLabel6 = "NAR";              // 3 characters
 void page1SoftkeyFunction6() {toggleNar();}
 
 
@@ -359,6 +366,8 @@ void backlight()
 
 
 // USER FUNCTIONS
+// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
+// or, if the desired function is a combination of actions, define a function below to be called by the sketch.
 
 
 void tuneSignalOn() 
@@ -386,38 +395,6 @@ void tuneSignalOff()
   radio.setMode(modeReturn);
 }
 
-
-void toggleVfo() 
-{
-  radio.toggleVFO();
-}
-
-
-
-void toggleNar() 
-{
-  radio.toggleNar();
-}
-
-
-
-void toggleIpo() 
-{
-  radio.toggleIPO();
-}
-
-
-
-void toggleBreakIn()
-{
-  radio.toggleBreakIn();
-}
-
-
-void toggleKeyer()
-{
-  radio.toggleKeyer();
-}
 
 
 
