@@ -148,6 +148,15 @@ bool FT817::toggleKeyer()
 	return toggleBitFromEEPROM(4);
 }
 
+// Toggle the RF Gain / Squelch control
+// Set by bit 7 of EEPROM byte 5F
+bool FT817::toggleRfSql()
+{
+	MSB = 0x00;
+	LSB = 0x5F;
+	return toggleBitFromEEPROM(7);
+}
+
 /****** SET COMMANDS ********/
 
 // set radio frequency directly (as a long integer)

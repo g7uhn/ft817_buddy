@@ -347,6 +347,7 @@ class FT817
 										// breifly to the other VFO and back, returns true is success
 		bool toggleBreakIn();			// toggle BreakIn
 		bool toggleKeyer();				// toggle Keyer status
+		bool toggleRfSql();				// toggle RF Gain/SQL control
 
 		// set commands
 		void setFreq(long freq);	// in 10' of hz
