@@ -1,0 +1,16 @@
+rig	KEYWORD1
+lock	KEYWORD2
+PTT	KEYWORD2
+setFreq	KEYWORD2
+setMode	KEYWORD2
+clar	KEYWORD2
+clarFreq	KEYWORD2
+switchVFO	KEYWORD2
+split	KEYWORD2
+rptrOffset	KEYWORD2
+rptrOffsetFreq	KEYWORD2
+squelch	KEYWORD2
+squelchFreq	KEYWORD2
+getMode	KEYWORD2
+getFreqMode	KEYWORD2
+txState	KEYWORD2
