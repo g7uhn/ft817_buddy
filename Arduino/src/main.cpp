@@ -229,18 +229,6 @@ void loop()  // MAIN LOOP
       button = 0;  // reset button variable to zero once we've used it
     }
 
-    if (sw7status == LOW)   // PAGE button
-    {
-      changePage();
-      delay(300);           // delay prevents series of rapid page changes 
-      sw7status = HIGH;     // reset sw7status to high once we've used it
-    }
-
-    if (sw8status == LOW)   // LIGHT button
-    {
-      backlight();
-    }
-
     // FAST REFRESH STATUS DISPLAY ITEMS
 
     // Print dial frequency
@@ -278,8 +266,17 @@ void loop()  // MAIN LOOP
   
 // SLOW REFRESH STUFF
 
-// Update the ABC keys
-displayABCkeys();
+  if (sw7status == LOW)   // PAGE button
+  {
+    changePage();
+    delay(300);           // delay prevents series of rapid page changes 
+    sw7status = HIGH;     // reset sw7status to high once we've used it
+  }
+
+  if (sw8status == LOW)   // LIGHT button
+  {
+    backlight();
+  }
 
 // Update the soft-key status indicators
 if (currentPage == 0)
@@ -375,6 +372,9 @@ else
   display.drawFastVLine(81, 21, 9, WHITE);
 }
 
+// Update the ABC keys
+displayABCkeys();
+
 display.display();  // update display
 
 }  // END OF MAIN LOOP
@@ -442,8 +442,6 @@ void changePage()
     //Button 6
     display.setCursor(62, 22);
     display.print(page0SoftkeyLabel6);
-    // write to display
-    display.display();
   }
   else if (currentPage ==1)
   {
