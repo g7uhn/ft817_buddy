@@ -164,94 +164,109 @@ void setup(void)
 } // end setup
 
 
-void loop() 
+
+void loop()  // MAIN LOOP
 {
-  // Get frequency
-  freq = radio.getFreqMode(); //freq is a long integer of 10's of Hz
-  int MHz = freq / 100000;
-  long remainder = freq % 100000;
-  float kHz = remainder / 100.00;
+  // Using two loops to avoid polling the radio too quickly with things we don't need a fast refresh on:
+  // 1) a "fast refresh" loop is run within the main loop for status items that we do want a quick refresh rate e.g. frequency and mode display
+  // 2) actions we only need a "slow refresh" are performed outside of the fast loop in the main loop e.g. status bits against soft-key labels
 
-  // Get human readable mode data
-  getReadableMode();
-
-
-//  // Get Receiver status (S-meter)
-//  byte rxStatusCmd[5] = {0x00, 0x00, 0x00, 0x00, 0xe7};
-//  radioCAT.sendCmd(rxStatusCmd, 5);
-//  sMeter = radioCAT.getByte();
-//  sMeter = sMeter << 4; //left shift the bits by 4 to make this an S-meter byte ranging from 00000000 to 11110000
-
-  if (currentPage == 0)
+  // FAST REFRESH LOOP starts here
+  for (int i = 0; i <=3; i++)
   {
-    if (button == 0) {}
-    else if (button == 1) { page0SoftkeyFunction1(); }
-    else if (button == 2) { page0SoftkeyFunction2(); }
-    else if (button == 3) { page0SoftkeyFunction3(); }
-    else if (button == 4) { page0SoftkeyFunction4(); }
-    else if (button == 5) { page0SoftkeyFunction5(); }
-    else if (button == 6) { page0SoftkeyFunction6(); }
-    button = 0;  // reset button variable to zero once we've used it
-  }
-  else if (currentPage == 1)
-  {
-    if (button == 0) {}
-    else if (button == 1) { page1SoftkeyFunction1(); }
-    else if (button == 2) { page1SoftkeyFunction2(); }
-    else if (button == 3) { page1SoftkeyFunction3(); }
-    else if (button == 4) { page1SoftkeyFunction4(); }
-    else if (button == 5) { page1SoftkeyFunction5(); }
-    else if (button == 6) { page1SoftkeyFunction6(); }
-    button = 0;  // reset button variable to zero once we've used it
-  }
+    // Get frequency
+    freq = radio.getFreqMode(); //freq is a long integer of 10's of Hz
+    int MHz = freq / 100000;
+    long remainder = freq % 100000;
+    float kHz = remainder / 100.00;
 
-  if (sw7status == LOW)
-  {
-    changePage();
-    delay(300);         // delay prevents series of rapid page changes 
-    sw7status = HIGH;   // reset sw7status to high once we've used it
-  }
+    // Get human readable mode data
+    getReadableMode();
 
-  if (sw8status == LOW)
-  {
-    backlight();
-  }
+  //  // Get Receiver status (S-meter)
+  //  byte rxStatusCmd[5] = {0x00, 0x00, 0x00, 0x00, 0xe7};
+  //  radioCAT.sendCmd(rxStatusCmd, 5);
+  //  sMeter = radioCAT.getByte();
+  //  sMeter = sMeter << 4; //left shift the bits by 4 to make this an S-meter byte ranging from 00000000 to 11110000
+
+    if (currentPage == 0)
+    {
+      if (button == 0) {}
+      else if (button == 1) { page0SoftkeyFunction1(); }
+      else if (button == 2) { page0SoftkeyFunction2(); }
+      else if (button == 3) { page0SoftkeyFunction3(); }
+      else if (button == 4) { page0SoftkeyFunction4(); }
+      else if (button == 5) { page0SoftkeyFunction5(); }
+      else if (button == 6) { page0SoftkeyFunction6(); }
+      button = 0;  // reset button variable to zero once we've used it
+    }
+    else if (currentPage == 1)
+    {
+      if (button == 0) {}
+      else if (button == 1) { page1SoftkeyFunction1(); }
+      else if (button == 2) { page1SoftkeyFunction2(); }
+      else if (button == 3) { page1SoftkeyFunction3(); }
+      else if (button == 4) { page1SoftkeyFunction4(); }
+      else if (button == 5) { page1SoftkeyFunction5(); }
+      else if (button == 6) { page1SoftkeyFunction6(); }
+      button = 0;  // reset button variable to zero once we've used it
+    }
+
+    if (sw7status == LOW)
+    {
+      changePage();
+      delay(300);         // delay prevents series of rapid page changes 
+      sw7status = HIGH;   // reset sw7status to high once we've used it
+    }
+
+    if (sw8status == LOW)
+    {
+      backlight();
+    }
+
+    // FAST REFRESH STATUS DISPLAY ITEMS
+
+    // Print dial frequency
+    display.setCursor(16, 32);
+    display.setTextSize(1);
+    display.setTextColor(BLACK, WHITE);
+    display.print(MHz);
+    display.print(",");
+    if (kHz < 100) display.print('0');
+    if (kHz < 10) display.print('0');
+    display.print(kHz);
+    if (MHz < 100) display.print(' ');
+    if (MHz < 10) display.print(' ');
+    display.print(' ');  // extra character to print over the occasional stray "8"
+
+    // Print current mode
+    display.setCursor(25, 22);
+    display.setTextSize(1);
+    display.setTextColor(BLACK, WHITE);
+    display.print(mode);
+
+    //// Print S-meter
+    //  tft.setCursor(50,120);
+    //  int sMeterWidth = 5*(sMeter / 16);
+    //  tft.drawRect(51,119,76,8,WHITE);
+    //  tft.fillRect(52,120,sMeterWidth,6,WHITE);
+    //  tft.fillRect((52+sMeterWidth),120,(74-sMeterWidth),6,BLACK);
+
+    delay(200);
+
+    // write to display
+    display.display();
+
+  } // END OF FAST REFRESH LOOP (performed 4 times in every main loop)
+  
 
 
-  // STATUS DISPLAY ITEMS
 
-  // Print dial frequency
-  display.setCursor(16, 32);
-  display.setTextSize(1);
-  display.setTextColor(BLACK, WHITE);
-  display.print(MHz);
-  display.print(",");
-  if (kHz < 100) display.print('0');
-  if (kHz < 10) display.print('0');
-  display.print(kHz);
-  if (MHz < 100) display.print(' ');
-  if (MHz < 10) display.print(' ');
-  display.print(' ');  // extra character to print over the occasional stray "8"
 
-  // Print current mode
-  display.setCursor(25, 22);
-  display.setTextSize(1);
-  display.setTextColor(BLACK, WHITE);
-  display.print(mode);
 
-  //// Print S-meter
-  //  tft.setCursor(50,120);
-  //  int sMeterWidth = 5*(sMeter / 16);
-  //  tft.drawRect(51,119,76,8,WHITE);
-  //  tft.fillRect(52,120,sMeterWidth,6,WHITE);
-  //  tft.fillRect((52+sMeterWidth),120,(74-sMeterWidth),6,BLACK);
 
-  delay(200);
 
-  // write to display
-  display.display();
-
-}  // end of main loop
+}  // END OF MAIN LOOP
 
 
 // Interrupt code reading buttons at 50Hz
