@@ -358,6 +358,7 @@ class FT817
 		void rptrOffsetFreq(long freq);
 		void squelch(char * mode);
 		void squelchFreq(unsigned int, char * sqlType);
+		void setKeyerSpeed(int speed);
 
 		// get commands
 		bool getVFO();					// return the actual VFO: 0 = A / 1 = B

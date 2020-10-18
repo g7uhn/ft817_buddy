@@ -114,21 +114,21 @@ String   page1SoftkeyLabel2 = "A/B";              // 3 characters
 void  page1SoftkeyFunction2() {radio.toggleVFO();}
 boolean page1SoftkeyStatus2() {}
 // SOFT-KEY 3 
-String   page1SoftkeyLabel3 = "NAR";              // 3 characters
-void  page1SoftkeyFunction3() {radio.toggleNar();}
-boolean page1SoftkeyStatus3() {return radio.getNar();}
+String   page1SoftkeyLabel3 = "   ";              // 3 characters
+void  page1SoftkeyFunction3() {}
+boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "   NAR";           // 6 characters
-void  page1SoftkeyFunction4() {radio.toggleNar();}
-boolean page1SoftkeyStatus4() {return radio.getNar();}
+String   page1SoftkeyLabel4 = "   k12";           // 6 characters
+void  page1SoftkeyFunction4() {radio.setKeyerSpeed(12);}
+boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
-String   page1SoftkeyLabel5 = "NAR";              // 3 characters
-void  page1SoftkeyFunction5() {radio.toggleNar();}
-boolean page1SoftkeyStatus5() {return radio.getNar();}
+String   page1SoftkeyLabel5 = "k15";              // 3 characters
+void  page1SoftkeyFunction5() {radio.setKeyerSpeed(15);}
+boolean page1SoftkeyStatus5() {}
 // SOFT-KEY 6
-String   page1SoftkeyLabel6 = "NAR";              // 3 characters
-void  page1SoftkeyFunction6() {radio.toggleNar();}
-boolean page1SoftkeyStatus6() {return radio.getNar();}
+String   page1SoftkeyLabel6 = "k18";              // 3 characters
+void  page1SoftkeyFunction6() {radio.setKeyerSpeed(18);}
+boolean page1SoftkeyStatus6() {}
 
 
 void setup(void) 
