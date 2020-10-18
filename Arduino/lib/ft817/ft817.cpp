@@ -482,7 +482,7 @@ bool FT817::readEEPROM()
 			nextByte = buffer[1];
 		}
 
-		delay(50); // mandatory delay
+		delay(20); // mandatory delay
 	}
 
 	return eepromValidData;

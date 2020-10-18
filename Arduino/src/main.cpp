@@ -134,7 +134,7 @@ boolean page1SoftkeyStatus6() {return radio.getNar();}
 void setup(void) 
 {
   // Start serial
-  Serial.begin(9600);       // serial port for the main sketch to talk to radio... is this necessary after the refactor?
+  Serial.begin(9600);       // serial port for the main sketch to talk to PC serial monitor
   radio.begin(9600);        // start the serial port for the CAT library
 
   // Set up some pins
@@ -269,7 +269,6 @@ void loop()  // MAIN LOOP
   if (sw7status == LOW)   // PAGE button
   {
     changePage();
-    delay(300);           // delay prevents series of rapid page changes 
     sw7status = HIGH;     // reset sw7status to high once we've used it
   }
 
