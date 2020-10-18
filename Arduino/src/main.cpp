@@ -60,7 +60,7 @@ byte MSB;
 byte LSB;
 // New variables for soft-key pages and soft-key status
 int currentPage = 1;    // initialise at the last page
-bool softkeyStatus[6];
+bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
@@ -70,6 +70,7 @@ void backlight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
+unsigned char ToByte(bool b[8]);  // debug aid, to be removed when unused
 
 
 // SETUP SOFT-KEY PAGES
@@ -78,35 +79,56 @@ void tuneSignalOff();
 // to be called by the sketch.  Don't forget to forward declare your user function above.
 
 // Page0 items
- 
-String page0SoftkeyLabel1 = "TUNon ";           // 6 characters
-void page0SoftkeyFunction1() {tuneSignalOn();}
-String page0SoftkeyLabel2 = "IPO";              // 3 characters
-void page0SoftkeyFunction2() {radio.toggleIPO();}
-String page0SoftkeyLabel3 = "KYR";              // 3 characters
-void page0SoftkeyFunction3() {radio.toggleKeyer();}
-String page0SoftkeyLabel4 = "TUNoff";           // 6 characters
-void page0SoftkeyFunction4() {tuneSignalOff();}
-String page0SoftkeyLabel5 = " BK";              // 3 characters
-void page0SoftkeyFunction5() {radio.toggleBreakIn();}
-String page0SoftkeyLabel6 = "NAR";              // 3 characters
-void page0SoftkeyFunction6() {radio.toggleNar();}
+// SOFT-KEY 1 
+String   page0SoftkeyLabel1 = "TUNon ";           // 6 characters
+void  page0SoftkeyFunction1() {tuneSignalOn();}
+boolean page0SoftkeyStatus1() {}
+// SOFT-KEY 2
+String   page0SoftkeyLabel2 = "IPO";              // 3 characters
+void  page0SoftkeyFunction2() {radio.toggleIPO();}
+boolean page0SoftkeyStatus2() {return radio.getIPO();}
+// SOFT-KEY 3 
+String   page0SoftkeyLabel3 = "KYR";              // 3 characters
+void  page0SoftkeyFunction3() {radio.toggleKeyer();}
+boolean page0SoftkeyStatus3() {return radio.getKeyer();}
+// SOFT-KEY 4 
+String   page0SoftkeyLabel4 = "TUNoff";           // 6 characters
+void  page0SoftkeyFunction4() {tuneSignalOff();}
+boolean page0SoftkeyStatus4() {}
+// SOFT-KEY 5 
+String   page0SoftkeyLabel5 = " BK";              // 3 characters
+void  page0SoftkeyFunction5() {radio.toggleBreakIn();}
+boolean page0SoftkeyStatus5() {return radio.getBreakIn();}
+// SOFT-KEY 6 
+String   page0SoftkeyLabel6 = "NAR";              // 3 characters
+void  page0SoftkeyFunction6() {radio.toggleNar();}
+boolean page0SoftkeyStatus6() {return radio.getNar();}
 
 // Page1 items
-
-String page1SoftkeyLabel1 = "RF/SQL";           // 6 characters
-void page1SoftkeyFunction1() {radio.toggleRfSql();}
-String page1SoftkeyLabel2 = "A/B";              // 3 characters
-void page1SoftkeyFunction2() {radio.toggleVFO();}
-String page1SoftkeyLabel3 = "NAR";              // 3 characters
-void page1SoftkeyFunction3() {radio.toggleNar();}
-String page1SoftkeyLabel4 = "   NAR";           // 6 characters
-void page1SoftkeyFunction4() {radio.toggleNar();}
-String page1SoftkeyLabel5 = "NAR";              // 3 characters
-void page1SoftkeyFunction5() {radio.toggleNar();}
-String page1SoftkeyLabel6 = "NAR";              // 3 characters
-void page1SoftkeyFunction6() {radio.toggleNar();}
-
+// SOFT-KEY 1 
+String   page1SoftkeyLabel1 = "RF/SQL";           // 6 characters
+void  page1SoftkeyFunction1() {radio.toggleRfSql();}
+boolean page1SoftkeyStatus1() {}
+// SOFT-KEY 2 
+String   page1SoftkeyLabel2 = "A/B";              // 3 characters
+void  page1SoftkeyFunction2() {radio.toggleVFO();}
+boolean page1SoftkeyStatus2() {}
+// SOFT-KEY 3 
+String   page1SoftkeyLabel3 = "NAR";              // 3 characters
+void  page1SoftkeyFunction3() {radio.toggleNar();}
+boolean page1SoftkeyStatus3() {return radio.getNar();}
+// SOFT-KEY 4 
+String   page1SoftkeyLabel4 = "   NAR";           // 6 characters
+void  page1SoftkeyFunction4() {radio.toggleNar();}
+boolean page1SoftkeyStatus4() {return radio.getNar();}
+// SOFT-KEY 5 
+String   page1SoftkeyLabel5 = "NAR";              // 3 characters
+void  page1SoftkeyFunction5() {radio.toggleNar();}
+boolean page1SoftkeyStatus5() {return radio.getNar();}
+// SOFT-KEY 6
+String   page1SoftkeyLabel6 = "NAR";              // 3 characters
+void  page1SoftkeyFunction6() {radio.toggleNar();}
+boolean page1SoftkeyStatus6() {return radio.getNar();}
 
 
 void setup(void) 
@@ -139,14 +161,14 @@ void setup(void)
   sei();                                // allow interrupts
 
   // Initial display setup
-  display.drawFastVLine(40, 0, 10, BLACK);
-  display.drawFastVLine(21, 10, 21, BLACK);
-  display.drawFastVLine(62, 10, 21, BLACK);
+  display.drawFastVLine(41, 0, 10, BLACK);
+  display.drawFastVLine(24, 10, 21, BLACK);
+  display.drawFastVLine(59, 10, 21, BLACK);
   display.drawFastHLine(0, 9, display.width(), BLACK);
-  display.drawFastHLine(0, 20, 21, BLACK);
-  display.drawFastHLine(62, 20, 21, BLACK);
-  display.drawFastHLine(0, 30, 21, BLACK);
-  display.drawFastHLine(62, 30, 21, BLACK);
+  display.drawFastHLine(0, 20, 24, BLACK);
+  display.drawFastHLine(60, 20, 24, BLACK);
+  display.drawFastHLine(0, 30, 24, BLACK);
+  display.drawFastHLine(60, 30, 24, BLACK);
   
   // Display the FT-817 A,B,C keys    g7uhn TO DO: move this into a periodic check of radio status along with SW1-6 status indications
   //displayABCkeys();
@@ -158,7 +180,6 @@ void setup(void)
   display.display();
 
 } // end setup
-
 
 
 void loop()  // MAIN LOOP
@@ -208,14 +229,14 @@ void loop()  // MAIN LOOP
       button = 0;  // reset button variable to zero once we've used it
     }
 
-    if (sw7status == LOW)
+    if (sw7status == LOW)   // PAGE button
     {
       changePage();
-      delay(300);         // delay prevents series of rapid page changes 
-      sw7status = HIGH;   // reset sw7status to high once we've used it
+      delay(300);           // delay prevents series of rapid page changes 
+      sw7status = HIGH;     // reset sw7status to high once we've used it
     }
 
-    if (sw8status == LOW)
+    if (sw8status == LOW)   // LIGHT button
     {
       backlight();
     }
@@ -236,7 +257,7 @@ void loop()  // MAIN LOOP
     display.print(' ');  // extra character to print over the occasional stray "8"
 
     // Print current mode
-    display.setCursor(25, 22);
+    display.setCursor(27, 22);
     display.setTextSize(1);
     display.setTextColor(BLACK, WHITE);
     display.print(mode);
@@ -255,12 +276,106 @@ void loop()  // MAIN LOOP
 
   } // END OF FAST REFRESH LOOP (performed 4 times in every main loop)
   
+// SLOW REFRESH STUFF
 
+// Update the ABC keys
 displayABCkeys();
 
+// Update the soft-key status indicators
+if (currentPage == 0)
+{
+  softkeyStatus[0] = page0SoftkeyStatus1();
+  softkeyStatus[1] = page0SoftkeyStatus2();
+  softkeyStatus[2] = page0SoftkeyStatus3();
+  softkeyStatus[3] = page0SoftkeyStatus4();
+  softkeyStatus[4] = page0SoftkeyStatus5();
+  softkeyStatus[5] = page0SoftkeyStatus6();
+}
+else if (currentPage == 1)
+{
+  softkeyStatus[0] = page1SoftkeyStatus1();
+  softkeyStatus[1] = page1SoftkeyStatus2();
+  softkeyStatus[2] = page1SoftkeyStatus3();
+  softkeyStatus[3] = page1SoftkeyStatus4();
+  softkeyStatus[4] = page1SoftkeyStatus5();
+  softkeyStatus[5] = page1SoftkeyStatus6();
+}
 
+// Display the soft-key status indicators
+if (softkeyStatus[0])
+{
+  display.drawFastVLine(0, 0, 9, BLACK);
+  display.drawFastVLine(1, 0, 9, BLACK);
+  display.drawFastVLine(2, 0, 9, BLACK);
+}
+else
+{
+  display.drawFastVLine(0, 0, 9, WHITE);
+  display.drawFastVLine(1, 0, 9, WHITE);
+  display.drawFastVLine(2, 0, 9, WHITE);
+}
+if (softkeyStatus[1])
+{
+  display.drawFastVLine(0, 10, 10, BLACK);
+  display.drawFastVLine(1, 10, 10, BLACK);
+  display.drawFastVLine(2, 10, 10, BLACK);
+}
+else
+{
+  display.drawFastVLine(0, 10, 10, WHITE);
+  display.drawFastVLine(1, 10, 10, WHITE);
+  display.drawFastVLine(2, 10, 10, WHITE);
+}
+if (softkeyStatus[2])
+{
+  display.drawFastVLine(0, 21, 9, BLACK);
+  display.drawFastVLine(1, 21, 9, BLACK);
+  display.drawFastVLine(2, 21, 9, BLACK);
+}
+else
+{
+  display.drawFastVLine(0, 21, 9, WHITE);
+  display.drawFastVLine(1, 21, 9, WHITE);
+  display.drawFastVLine(2, 21, 9, WHITE);
+}
+if (softkeyStatus[3])
+{
+  display.drawFastVLine(83, 0, 9, BLACK);
+  display.drawFastVLine(82, 0, 9, BLACK);
+  display.drawFastVLine(81, 0, 9, BLACK);
+}
+else
+{
+  display.drawFastVLine(83, 0, 9, WHITE);
+  display.drawFastVLine(82, 0, 9, WHITE);
+  display.drawFastVLine(81, 0, 9, WHITE);
+}
+if (softkeyStatus[4])
+{
+  display.drawFastVLine(83, 10, 10, BLACK);
+  display.drawFastVLine(82, 10, 10, BLACK);
+  display.drawFastVLine(81, 10, 10, BLACK);
+}
+else
+{
+  display.drawFastVLine(83, 10, 10, WHITE);
+  display.drawFastVLine(82, 10, 10, WHITE);
+  display.drawFastVLine(81, 10, 10, WHITE);
+}
+if (softkeyStatus[5])
+{
+  display.drawFastVLine(83, 21, 9, BLACK);
+  display.drawFastVLine(82, 21, 9, BLACK);
+  display.drawFastVLine(81, 21, 9, BLACK);
+}
+else
+{
+  display.drawFastVLine(83, 21, 9, WHITE);
+  display.drawFastVLine(82, 21, 9, WHITE);
+  display.drawFastVLine(81, 21, 9, WHITE);
+}
 
-
+display.display();  // update display
 
 }  // END OF MAIN LOOP
 
@@ -310,22 +425,22 @@ void changePage()
   {
     display.setTextSize(1);
     //Button 1
-    display.setCursor(0, 0);
+    display.setCursor(5, 0);
     display.print(page0SoftkeyLabel1);
     //Button 2
-    display.setCursor(0, 11);
+    display.setCursor(5, 11);
     display.print(page0SoftkeyLabel2);
     //Button 3
-    display.setCursor(0, 22);
+    display.setCursor(5, 22);
     display.print(page0SoftkeyLabel3);
     //Button 4
-    display.setCursor(48, 0);
+    display.setCursor(44, 0);
     display.print(page0SoftkeyLabel4);
     //Button 5
-    display.setCursor(66, 11);
+    display.setCursor(62, 11);
     display.print(page0SoftkeyLabel5);
     //Button 6
-    display.setCursor(66, 22);
+    display.setCursor(62, 22);
     display.print(page0SoftkeyLabel6);
     // write to display
     display.display();
@@ -334,25 +449,23 @@ void changePage()
   {
     display.setTextSize(1);
     //Button 1
-    display.setCursor(0, 0);
+    display.setCursor(5, 0);
     display.print(page1SoftkeyLabel1);
     //Button 2
-    display.setCursor(0, 11);
+    display.setCursor(5, 11);
     display.print(page1SoftkeyLabel2);
     //Button 3
-    display.setCursor(0, 22);
+    display.setCursor(5, 22);
     display.print(page1SoftkeyLabel3);
     //Button 4
-    display.setCursor(48, 0);
+    display.setCursor(44, 0);
     display.print(page1SoftkeyLabel4);
     //Button 5
-    display.setCursor(66, 11);
+    display.setCursor(62, 11);
     display.print(page1SoftkeyLabel5);
     //Button 6
-    display.setCursor(66, 22);
+    display.setCursor(62, 22);
     display.print(page1SoftkeyLabel6);
-    // write to display
-    display.display();
   }
 }
 
@@ -457,55 +570,55 @@ void displayABCkeys()
 void getReadableMode() {
   modeByte = radio.getMode();
   if (modeByte == 0x00) {
-    mode = "LSB   ";
+    mode = "LSB  ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x01) {
-    mode = "USB   ";
+    mode = "USB  ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x02) {
-    mode = "CW    ";
+    mode = "CW   ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x03) {
-    mode = "CWR   ";
+    mode = "CWR  ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x82) {
-    mode = "CW NR ";
+    mode = "CW N ";
     modeBase = 0x02;
   }
   else if (modeByte == 0x83) {
-    mode = "CWR NR";
+    mode = "CWR N";
     modeBase = 0x03;
   }
   else if (modeByte == 0x8A) {
-    mode = "DIG NR";
+    mode = "DIG N";
     modeBase = 0x0A;
   }
   else if (modeByte == 0x04) {
-    mode = "AM    ";
+    mode = "AM   ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x06) {
-    mode = "WFM   ";
+    mode = "WFM  ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x08) {
-    mode = "FM    ";
+    mode = "FM   ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x88) { // this one wasn't listed in the spec?
-    mode = "FM-N  ";
+    mode = "FM-N ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x0A) {
-    mode = "DIG   ";
+    mode = "DIG  ";
     modeBase = modeByte;
   }
   else if (modeByte == 0x0C) {
-    mode = "PKT   ";
+    mode = "PKT  ";
     modeBase = modeByte;
   }
   else {
