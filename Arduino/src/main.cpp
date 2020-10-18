@@ -52,22 +52,18 @@ String mode;
 byte modeByte;
 byte modeBase;    // used for the radio to return to this mode after generating Tune signal... needed to accomodate the CW/CWR/DIG NAR codes
 byte modeReturn;
+byte abcKeys = B1111;
 int buttonStatus = 0;   // analog value of buttonPin...
 int button = 0;         // ...button number
-boolean splitState = false;
 byte sMeter;
-byte currentBand;
-int currentVfo;
 byte MSB;
 byte LSB;
-byte returnedByte;
 // New variables for soft-key pages and soft-key status
 int currentPage = 1;    // initialise at the last page
-//char page0SoftkeyLabel[6];
-//char page1SoftkeyLabel[6];
-boolean softkeyStatus[6];
+bool softkeyStatus[6];
 
 // Forward declaration of functions (required for PlatformIO)
+// If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
 void displayABCkeys();
 void getReadableMode();
 void backlight();
@@ -152,8 +148,8 @@ void setup(void)
   display.drawFastHLine(0, 30, 21, BLACK);
   display.drawFastHLine(62, 30, 21, BLACK);
   
-  // Display the FT-817 soft-keys (A,B,C)    g7uhn TO DO: move this into a periodic check of radio status along with SW1-6 status indications
-  displayABCkeys();
+  // Display the FT-817 A,B,C keys    g7uhn TO DO: move this into a periodic check of radio status along with SW1-6 status indications
+  //displayABCkeys();
   
   // Display the soft keys by calling changePage()
   changePage();
@@ -260,7 +256,7 @@ void loop()  // MAIN LOOP
   } // END OF FAST REFRESH LOOP (performed 4 times in every main loop)
   
 
-
+displayABCkeys();
 
 
 
@@ -405,49 +401,53 @@ void tuneSignalOff()
 
 void displayABCkeys() 
 {
-  byte abcKeys = radio.getDisplaySelection();
-  
-  // Print current soft-keys (A B C)
-  display.setCursor(0, 41);
-  display.setTextSize(1);
-  display.setTextColor(BLACK, WHITE);
-  switch (abcKeys) {
-    case B0000:
-      display.print(" A/B  A=B  SPL");
-      break;
-    case B0001:
-      display.print(" MW   MC   TAG");
-      break;
-    case B0010:
-      display.print(" STO  RCL  PMS");
-      break;
-    case B0011:
-      display.print(" RPT  REV  TON");
-      break;
-    case B0100:
-      display.print(" SCN  PRI  DW ");
-      break;
-    case B0101:
-      display.print(" SSM  SCH  ART");
-      break;
-    case B0110:
-      display.print(" IPO  ATT  NAR");
-      break;
-    case B0111:
-      display.print(" NB   AGC     ");
-      break;
-    case B1000:
-      display.print(" PWR  MTR     ");
-      break;
-    case B1001:
-      display.print(" VOX  BK   KYR");
-      break;
-    case B1010:
-      display.print(" CHG  VLT  DSP");
-      break;
-    case B1011:
-      display.print(" TCH  DCH     ");
-      break;
+  byte currentAbcKeys = radio.getDisplaySelection();
+
+  if (currentAbcKeys != abcKeys)
+  {
+    abcKeys = currentAbcKeys;
+    // Print current ABC keys
+    display.setCursor(0, 41);
+    display.setTextSize(1);
+    display.setTextColor(BLACK, WHITE);
+    switch (abcKeys) {
+      case B0000:
+        display.print(" A/B  A=B  SPL");
+        break;
+      case B0001:
+        display.print(" MW   MC   TAG");
+        break;
+      case B0010:
+        display.print(" STO  RCL  PMS");
+        break;
+      case B0011:
+        display.print(" RPT  REV  TON");
+        break;
+      case B0100:
+        display.print(" SCN  PRI  DW ");
+        break;
+      case B0101:
+        display.print(" SSM  SCH  ART");
+        break;
+      case B0110:
+        display.print(" IPO  ATT  NAR");
+        break;
+      case B0111:
+        display.print(" NB   AGC     ");
+        break;
+      case B1000:
+        display.print(" PWR  MTR     ");
+        break;
+      case B1001:
+        display.print(" VOX  BK   KYR");
+        break;
+      case B1010:
+        display.print(" CHG  VLT  DSP");
+        break;
+      case B1011:
+        display.print(" TCH  DCH     ");
+        break;
+    }
   }
 }
 
