@@ -268,28 +268,14 @@ void FT817::squelchFreq(unsigned int freq, char * sqlType)
 void FT817::setKeyerSpeed(int speed)
 {
 	byte wpm = constrain(speed, 4, 60);   	// Constrain input between FT-817 min and max keyer speed
-	Serial.print("Requested speed = ");
-	Serial.println(speed);
-	Serial.print("Constrained speed = ");
-	Serial.println(wpm);
 	byte keyerSpeedSetting = wpm - 4;
-	Serial.print("Keyer speed setting (before bitwise op)= ");
-	Serial.println(keyerSpeedSetting);
-	Serial.print("Keyer speed setting (binary)= ");
-	Serial.println(keyerSpeedSetting, BIN);
 	MSB = 0x00; // set the address to write to
 	LSB = 0x62;
 	readEEPROM();
-	Serial.print("actualByte received = ");
-	Serial.println(actualByte, BIN);
 	if (eepromValidData)
 	{
 		byte bitsAbove = 0b11000000 & actualByte;	// bits 6 and 7 from byte 0x62 must be kept (= Battery Charge Time)
-		Serial.print("bits above = ");
-		Serial.println(bitsAbove, BIN);
 		keyerSpeedSetting = bitsAbove | keyerSpeedSetting;
-		Serial.print("Keyer speed setting (after bitwise op)= ");
-		Serial.println(keyerSpeedSetting, BIN);
 		writeEEPROM(keyerSpeedSetting);
 	}
 }
