@@ -135,7 +135,7 @@ void setup(void)
 {
   // Start serial
   Serial.begin(9600);       // serial port for the main sketch to talk to PC serial monitor
-  radio.begin(9600);        // start the serial port for the CAT library
+  radio.begin(38400);        // start the serial port for the CAT library
 
   // Set up some pins
   pinMode(backlightPin, OUTPUT);

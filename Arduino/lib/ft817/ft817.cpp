@@ -46,7 +46,7 @@ void FT817::setSerial(SoftwareSerial portInfo)
 }
 
 // similar to Serial.begin(baud); command
-void FT817::begin(int baud)
+void FT817::begin(long baud)
 {
 	rigCat.begin(baud);
 }
