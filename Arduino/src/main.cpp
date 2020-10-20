@@ -618,7 +618,7 @@ void getReadableMode() {
     mode = "PKT  ";
     modeBase = modeByte;
   }
-  else {
-    mode = "???";
-  }
+  // else {             // removed this "else" to silence the intermittent ??? on the display
+  //   mode = "???";
+  // }
 }
