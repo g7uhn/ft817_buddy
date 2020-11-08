@@ -332,8 +332,8 @@ class FT817
 	public:
 		FT817();
 		// setup
-		// void setSerial(SoftwareSerial portInfo);	// load the softserial into the FT817
-		void begin(long baud);						// set the baudrate of the serial lib 
+		void setSerial(SoftwareSerial portInfo);	// load the softserial into the FT817
+		void begin(int baud);						// set the baudrate of the softserial lib 
 
 		// toggles
 		void lock(boolean toggle);		// lock/unlock
@@ -347,7 +347,6 @@ class FT817
 										// breifly to the other VFO and back, returns true is success
 		bool toggleBreakIn();			// toggle BreakIn
 		bool toggleKeyer();				// toggle Keyer status
-		bool toggleRfSql();				// toggle RF Gain/SQL control
 
 		// set commands
 		void setFreq(long freq);	// in 10' of hz
@@ -358,7 +357,6 @@ class FT817
 		void rptrOffsetFreq(long freq);
 		void squelch(char * mode);
 		void squelchFreq(unsigned int, char * sqlType);
-		void setKeyerSpeed(int speed);
 
 		// get commands
 		bool getVFO();					// return the actual VFO: 0 = A / 1 = B
