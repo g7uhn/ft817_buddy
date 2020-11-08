@@ -332,8 +332,8 @@ class FT817
 	public:
 		FT817();
 		// setup
-		void setSerial(SoftwareSerial portInfo);	// load the softserial into the FT817
-		void begin(long baud);						// set the baudrate of the softserial lib 
+		// void setSerial(SoftwareSerial portInfo);	// load the softserial into the FT817
+		void begin(long baud);						// set the baudrate of the serial lib 
 
 		// toggles
 		void lock(boolean toggle);		// lock/unlock

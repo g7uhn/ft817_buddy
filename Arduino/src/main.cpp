@@ -134,7 +134,7 @@ boolean page1SoftkeyStatus6() {}
 void setup(void) 
 {
   // Start serial
-  Serial.begin(9600);       // serial port for the main sketch to talk to PC serial monitor
+  // Serial.begin(9600);       // serial port for the main sketch to talk to PC serial monitor
   radio.begin(38400);        // start the serial port for the CAT library
 
   // Set up some pins

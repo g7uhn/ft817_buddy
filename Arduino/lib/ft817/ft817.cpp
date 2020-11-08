@@ -25,11 +25,14 @@ This allow us to be consistent and save a few bytes of firmware
 */
 
 #include <Arduino.h>
-#include <SoftwareSerial.h>
+// #include <SoftwareSerial.h>
 #include "ft817.h"
 
-// define software serial IO pins here:
-extern SoftwareSerial rigCat(12, 11); // rx,tx
+// if using software serial, define software serial IO pins here:
+// extern SoftwareSerial rigCat(12, 11); // rx,tx
+
+// if using hardware serial, define hardware serial alias here:
+#define rigCat Serial
 
 #define dlyTime 5	// delay (in ms) after serial writes
 
@@ -40,10 +43,10 @@ FT817::FT817(){ }	// nothing to do when first instanced
 
 // Setup software serial with user defined input
 // from the Arduino sketch (function, though very slow)
-void FT817::setSerial(SoftwareSerial portInfo)
-{
-	rigCat = portInfo;
-}
+// void FT817::setSerial(SoftwareSerial portInfo)
+// {
+// 	rigCat = portInfo;
+// }
 
 // similar to Serial.begin(baud); command
 void FT817::begin(long baud)
