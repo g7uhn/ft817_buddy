@@ -29,8 +29,8 @@
 #include <Adafruit_I2CDevice.h>
 #include <FT817.h>      // https://github.com/stdevPavelmc/ft817/tree/main/lib/ft817 
 
-// uncomment this if you want to use the functions that WRITE to the EEPROM 
-#define EEPROM_WRITES
+// uncomment this if you want to use the functions that WRITE to the EEPROM and accept the responsibility stated above!  :-)
+//#define EEPROM_WRITES
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
