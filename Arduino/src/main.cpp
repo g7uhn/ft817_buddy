@@ -47,6 +47,7 @@ int sw9pin = 9;           // SW9 input is D9
 bool sw7status = 1;   // using pullup, pressing button takes this low
 bool sw8status = 1;   // using pullup, pressing button takes this low
 bool sw9status = 1;   // using pullup, pressing button takes this low
+bool backlightStatus = 0; // Backlight, initialises as OFF
 long freq;
 String mode;
 byte modeByte;
@@ -66,7 +67,7 @@ bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
 void displayABCkeys();
 void getReadableMode();
-void backlight();
+void toggleBacklight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
@@ -274,7 +275,8 @@ void loop()  // MAIN LOOP
 
   if (sw8status == LOW)   // LIGHT button
   {
-    backlight();
+    toggleBacklight();
+    sw8status = HIGH;     // reset sw8status to high once we've used it
   }
 
 // Update the soft-key status indicators
@@ -406,10 +408,15 @@ ISR(TIMER1_COMPA_vect)
   bool sw7 = digitalRead(sw7pin);
   if (!sw7)
   {
-    sw7status = LOW;
+    sw7status = LOW;  // holds switch status LOW until it has been used in the main loop
   }
 
-  sw8status = digitalRead(sw8pin);
+  bool sw8 = digitalRead(sw8pin);
+  if (!sw8)
+  {
+    sw8status = LOW;  // holds switch status LOW until it has been used in the main loop
+  }
+
   sw9status = digitalRead(sw9pin);
 }
 
@@ -467,12 +474,17 @@ void changePage()
 }
 
 
-// Very rough backlight function (blocking)     g7uhn TO DO: make a better (non-blocking) backlight
-void backlight()
+// Toggle backlight
+void toggleBacklight()
 {
-  digitalWrite(backlightPin, 1);
-  delay(5000);                  // Backlight on for 5s
-  digitalWrite(backlightPin, 0);
+  if (backlightStatus == 0) {
+    digitalWrite(backlightPin, 1);
+    backlightStatus = 1;
+  }
+  else {
+    digitalWrite(backlightPin, 0);
+    backlightStatus = 0;
+  }
 }
 
 
