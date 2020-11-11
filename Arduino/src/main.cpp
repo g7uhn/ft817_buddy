@@ -48,6 +48,8 @@ bool sw7status = 1;   // using pullup, pressing button takes this low
 bool sw8status = 1;   // using pullup, pressing button takes this low
 bool sw9status = 1;   // using pullup, pressing button takes this low
 bool backlightStatus = 0; // Backlight, initialises as OFF
+bool timedBacklight = 0;
+int backlightCounter = 0;
 long freq;
 String mode;
 byte modeByte;
@@ -67,7 +69,7 @@ bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
 void displayABCkeys();
 void getReadableMode();
-void toggleBacklight();
+void backlight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
@@ -270,13 +272,15 @@ void loop()  // MAIN LOOP
   if (sw7status == LOW)   // PAGE button
   {
     changePage();
-    sw7status = HIGH;     // reset sw7status to high once we've used it
+    delay(200);           // short delay to prevent occasional "double-press"
+    sw7status = HIGH;     // reset sw7status to high
   }
 
   if (sw8status == LOW)   // LIGHT button
   {
-    toggleBacklight();
-    sw8status = HIGH;     // reset sw8status to high once we've used it
+    backlight();
+    delay(200);           // short delay to prevent occasional "double-press"
+    sw8status = HIGH;     // reset sw8status to high
   }
 
 // Update the soft-key status indicators
@@ -376,7 +380,24 @@ else
 // Update the ABC keys
 displayABCkeys();
 
+// Timed backlight countdown operation
+if(timedBacklight == true)
+{
+  if(backlightCounter > 0)
+  {
+    backlightCounter = backlightCounter - 1;
+  }
+  else
+  {
+    digitalWrite(backlightPin, 0);    // turn the backlight off
+    backlightStatus = 0;
+    timedBacklight = 0;               // end the timed backlight
+  }
+}
+
 display.display();  // update display
+
+sw9status = HIGH;     // reset sw9status to high
 
 }  // END OF MAIN LOOP
 
@@ -417,7 +438,11 @@ ISR(TIMER1_COMPA_vect)
     sw8status = LOW;  // holds switch status LOW until it has been used in the main loop
   }
 
-  sw9status = digitalRead(sw9pin);
+  bool sw9 = digitalRead(sw9pin);
+  if (!sw9)
+  {
+    sw9status = LOW;  // holds switch status LOW until it has been used in the main loop
+  }
 }
 
 
@@ -474,16 +499,27 @@ void changePage()
 }
 
 
-// Toggle backlight
-void toggleBacklight()
+// LIGHT = timed backlight, SHIFT+LIGHT = toggle backlight
+void backlight()
 {
-  if (backlightStatus == 0) {
+  if (backlightStatus == 1)  // if backlight is already on, turn it off
+  {
+      digitalWrite(backlightPin, 0);
+      backlightStatus = 0;
+      timedBacklight = 0;
+      backlightCounter = 0;
+  }
+  else if (sw9status == LOW)   // if SHIFT key is down, turn backlight on
+  {
     digitalWrite(backlightPin, 1);
     backlightStatus = 1;
   }
-  else {
-    digitalWrite(backlightPin, 0);
-    backlightStatus = 0;
+  else                    // if SHIFT key is not down, begin a timed backlight
+  {
+    timedBacklight = 1;
+    backlightCounter = 4;      // set the backlight counter to a number, this will be counted down in the main loop
+    digitalWrite(backlightPin, 1);
+    backlightStatus = 1;
   }
 }
 
