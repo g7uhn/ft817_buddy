@@ -37,11 +37,16 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,
 FT817 radio;              // define “radio” so that we may pass CAT and EEPROM commands
 
 // Define PCB pins
-int backlightPin = 8;     // backlight output pin (not the "LIGHT" input button!)
-int buttonPin = A0;       // SW1-SW6 arrive as different levels on analog input A0
-int sw7pin = 2;           // SW7 input is D2
-int sw8pin = 10;          // SW8 input is D10
-int sw9pin = 9;           // SW9 input is D9
+#define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
+#define buttonPin A0       // SW1-SW6 arrive as different levels on analog input A0
+#define sw7pin 2           // SW7 input is D2
+#define sw8pin 10          // SW8 input is D10
+#define sw9pin 9           // SW9 input is D9
+#define keySw1 15          // A1 (pin 15) is Keyer SW1
+#define keySw2 16          // A1 (pin 16) is Keyer SW2
+#define keySw3 17          // A1 (pin 17) is Keyer SW3
+#define keySw4 18          // A1 (pin 18) is Keyer SW4
+
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
 bool sw7status = 1;   // using pullup, pressing button takes this low
@@ -145,6 +150,16 @@ void setup(void)
   pinMode(sw7pin, INPUT_PULLUP);
   pinMode(sw8pin, INPUT_PULLUP);
   pinMode(sw9pin, INPUT_PULLUP);
+  pinMode(keySw1, OUTPUT);
+  pinMode(keySw2, OUTPUT);
+  pinMode(keySw3, OUTPUT);
+  pinMode(keySw4, OUTPUT);
+
+  digitalWrite(backlightPin, LOW);
+  digitalWrite(keySw1, LOW);
+  digitalWrite(keySw2, LOW);
+  digitalWrite(keySw3, LOW);
+  digitalWrite(keySw4, LOW);
 
   // Initialize Display
   display.begin();
