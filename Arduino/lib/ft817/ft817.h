@@ -332,7 +332,7 @@ class FT817
 	public:
 		FT817();
 		// setup
-		// void setSerial(SoftwareSerial portInfo);	// load the softserial into the FT817
+		// void setSerial(SoftwareSerial portInfo);	// load the softserial to the FT817 (not used on FT817_Buddy from Rev2)
 		void begin(long baud);						// set the baudrate of the serial lib 
 
 		// toggles
@@ -350,7 +350,7 @@ class FT817
 		bool toggleRfSql();				// toggle RF Gain/SQL control
 
 		// set commands
-		void setFreq(long freq);	// in 10' of hz
+		void setFreq(long freq);		// in 10' of hz
 		void setMode(byte mode);		// in text
 		void clarFreq(long freq);		// 
 		void switchVFO(bool vfo);		// 0 = A / 1 = B, checks the actual VFO to know if need to change
