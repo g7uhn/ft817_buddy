@@ -25,13 +25,13 @@ This allow us to be consistent and save a few bytes of firmware
 */
 
 #include <Arduino.h>
-// #include <SoftwareSerial.h>
 #include "ft817.h"
 
-// if using software serial, define software serial IO pins here:
+// if using software serial, include and define software serial IO pins here (uncomment two lines below):
+// #include <SoftwareSerial.h>
 // extern SoftwareSerial rigCat(12, 11); // rx,tx
 
-// if using hardware serial, define hardware serial alias here:
+// if using hardware serial, define hardware serial alias here (uncomment one line below):
 #define rigCat Serial
 
 #define dlyTime 5	// delay (in ms) after serial writes
@@ -181,7 +181,6 @@ void FT817::setMode(byte mode)
 		flushBuffer();
 		buffer[0] = mode;
 		buffer[4] = CAT_MODE_SET;
-		// missing a sendCmd here...
 		sendCmd();
 		getByte();     
 	}
@@ -272,7 +271,7 @@ void FT817::setKeyerSpeed(int speed)
 {
 	byte wpm = constrain(speed, 4, 60);   	// Constrain input between FT-817 min and max keyer speed
 	byte keyerSpeedSetting = wpm - 4;
-	MSB = 0x00; // set the address to write to
+	MSB = 0x00;
 	LSB = 0x62;
 	readEEPROM();
 	if (eepromValidData)
@@ -396,7 +395,7 @@ bool FT817::getIPO()
 	return getBitFromVFO(2, 5);
 }
 
-// get BrakIn status from bit 5 in EEPROM address 0x58
+// get BreakIn status from bit 5 in EEPROM address 0x58
 bool FT817::getBreakIn()
 {
 	MSB = 0x00;
@@ -446,7 +445,6 @@ void FT817::sendCmd()
 	for (byte i=0; i<5; i++)
 	{
 		rigCat.write(buffer[i]);
-//		Serial.println(buffer[i]);        // debug aid
 	}
 }
 
