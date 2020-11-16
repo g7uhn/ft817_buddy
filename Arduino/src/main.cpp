@@ -12,16 +12,17 @@
   Michael Sansom G0POT
   Pavel Milanes Costa CO7WT
 
-  IMPORTANT NOTE!  You must do/check two things before using this code:
-  1) In the FT817.cpp library file, check the SoftwareSerial pin number are set to (12, 11) for the FT817 Buddy PCB.
-  2) Uncomment the line below to unlock EEPROM writes and acknowledge you accept the risk that comes with writing to the
-     FT-817 EEPROM i.e. an interruption or write error may reset your radio to pre-alignment factory defaults.
-     The authors above bear no responsibility for your use of this code and you proceed at your own risk.  See KA7OEI's 
-     page here (http://www.ka7oei.com/ft817_meow.html) for details of how to record your own radio's unique factory settings
-     such that you can restore your radio if the worst happens!  :-)
+  IMPORTANT NOTE!  You MUST do/check two things before using this code:
+  1) By using this code you acknowledge that you accept the risk that comes with writing to the FT-817 EEPROM i.e. an interruption
+     or write error may reset your radio to pre-alignment factory defaults.  See KA7OEI's page here (http://www.ka7oei.com/ft817_meow.html)
+     for details of how to record your own radio's unique factory settings such that you can restore your radio if the worst happens!
+  2) Uncomment the line below to unlock the sketch that may write to the EEPROM.  You did record your own radio's 76 factory
+     calibration settings from the "soft calibration" menu... didn't you?
+  
+  The authors above bear no responsibility for your use of this code and you proceed at your own risk.  
 */
 
-// uncomment this if you want to use the functions that WRITE to the EEPROM and accept the responsibility stated above!  :-)
+// uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
 // #define EEPROM_WRITES
 
 // Include libraries
