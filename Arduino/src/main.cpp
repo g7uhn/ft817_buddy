@@ -21,6 +21,9 @@
      such that you can restore your radio if the worst happens!  :-)
 */
 
+// uncomment this if you want to use the functions that WRITE to the EEPROM and accept the responsibility stated above!  :-)
+// #define EEPROM_WRITES
+
 // Include libraries
 #include <Arduino.h>    // required for PlatformIO IDE (not required if you're using Arduino IDE)
 #include <SPI.h>
@@ -28,9 +31,6 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_I2CDevice.h>
 #include <FT817.h>      // https://github.com/stdevPavelmc/ft817/tree/main/lib/ft817 
-
-// uncomment this if you want to use the functions that WRITE to the EEPROM and accept the responsibility stated above!  :-)
-//#define EEPROM_WRITES
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
@@ -137,7 +137,6 @@ boolean page1SoftkeyStatus6() {}
 void setup(void) 
 {
   // Start serial
-  // Serial.begin(9600);       // serial port for the main sketch to talk to PC serial monitor
   radio.begin(38400);        // start the serial port for the CAT library
 
   // Set up some pins
@@ -173,9 +172,6 @@ void setup(void)
   display.drawFastHLine(0, 30, 24, BLACK);
   display.drawFastHLine(60, 30, 24, BLACK);
   
-  // Display the FT-817 A,B,C keys    g7uhn TO DO: move this into a periodic check of radio status along with SW1-6 status indications
-  //displayABCkeys();
-  
   // Display the soft keys by calling changePage()
   changePage();
 
@@ -187,6 +183,22 @@ void setup(void)
 
 void loop()  // MAIN LOOP
 {
+  #ifndef EEPROM_WRITES   // if user has not accepted risk/responsibility of EEPROM writes, display a reminder  :-)
+    display.setCursor(0, 0);
+    display.setTextSize(1);
+    display.setTextColor(BLACK, WHITE);
+    display.println(" Please agree ");
+    display.println(" to EEPROM    ");
+    display.println(" writes to    ");
+    display.println(" continue...  ");
+    display.println(" See notes in ");
+    display.println(" the code     ");
+    display.display();
+    delay(2000);
+  #endif
+  
+  #ifdef EEPROM_WRITES    // if user has accepted the risk/responsibility of EEPROM writes, go ahead and run the main code block...
+
   // Using two loops to avoid polling the radio too quickly with things we don't need a fast refresh on:
   // 1) a "fast refresh" loop is run within the main loop for status items that we do want a quick refresh rate e.g. frequency and mode display
   // 2) actions we only need a "slow refresh" are performed outside of the fast loop in the main loop e.g. status bits against soft-key labels
@@ -399,6 +411,7 @@ display.display();  // update display
 
 sw9status = HIGH;     // reset sw9status to high
 
+#endif
 }  // END OF MAIN LOOP
 
 
