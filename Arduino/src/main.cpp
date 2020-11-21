@@ -20,6 +20,8 @@
      calibration settings from the "soft calibration" menu... didn't you?
   
   The authors above bear no responsibility for your use of this code and you proceed at your own risk.  
+  
+  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
 */
 
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)

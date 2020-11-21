@@ -10,3 +10,5 @@ A little story about the build is over at [SWLing Post](https://swling.com/blog/
 Hardware files now removed pending release of the "Rev2" design (or higher) where we now use hardware serial.  Arduino code on this repository now corresponds to Rev2 hardware in testing... watch this space!
 
 Enjoy!
+
+This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
