@@ -178,6 +178,9 @@ void setup(void)
   // Display the soft keys by calling changePage()
   changePage();
 
+  // Update the ABC keys
+  displayABCkeys();
+
   // write to display
   display.display();
 
@@ -391,9 +394,6 @@ else
   display.drawFastVLine(82, 21, 9, WHITE);
   display.drawFastVLine(81, 21, 9, WHITE);
 }
-
-// Update the ABC keys
-displayABCkeys();
 
 // Timed backlight countdown operation
 if(timedBacklight == true)
