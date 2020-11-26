@@ -40,11 +40,16 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,
 FT817 radio;              // define “radio” so that we may pass CAT and EEPROM commands
 
 // Define PCB pins
-int backlightPin = 8;     // backlight output pin (not the "LIGHT" input button!)
-int buttonPin = A0;       // SW1-SW6 arrive as different levels on analog input A0
-int sw7pin = 2;           // SW7 input is D2
-int sw8pin = 10;          // SW8 input is D10
-int sw9pin = 9;           // SW9 input is D9
+#define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
+#define buttonPin A0       // SW1-SW6 arrive as different levels on analog input A0
+#define sw7pin 2           // SW7 input is D2
+#define sw8pin 10          // SW8 input is D10
+#define sw9pin 9           // SW9 input is D9
+#define keySw1 15          // A1 (pin 15) is Keyer SW1
+#define keySw2 16          // A1 (pin 16) is Keyer SW2
+#define keySw3 17          // A1 (pin 17) is Keyer SW3
+#define keySw4 18          // A1 (pin 18) is Keyer SW4
+
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
 bool sw7status = 1;   // using pullup, pressing button takes this low
@@ -65,7 +70,7 @@ byte sMeter;
 byte MSB;
 byte LSB;
 // New variables for soft-key pages and soft-key status
-int currentPage = 1;    // initialise at the last page
+int currentPage = 2;    // initialise at the last page
 bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 
 // Forward declaration of functions (required for PlatformIO)
@@ -76,6 +81,11 @@ void backlight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
+void pressKeySw1();
+void pressKeySw2();
+void pressKeySw3();
+void pressKeySw4();
+void longPressKeySw1();
 unsigned char ToByte(bool b[8]);  // debug aid, to be removed when unused
 
 
@@ -137,6 +147,33 @@ void  page1SoftkeyFunction6() {radio.setKeyerSpeed(18);}
 boolean page1SoftkeyStatus6() {}
 
 
+// Page2 items
+// SOFT-KEY 1 
+String   page2SoftkeyLabel1 = "M1    ";           // 6 characters
+void  page2SoftkeyFunction1() {pressKeySw1();}
+boolean page2SoftkeyStatus1() {}
+// SOFT-KEY 2 
+String   page2SoftkeyLabel2 = "CMD";              // 3 characters
+void  page2SoftkeyFunction2() {longPressKeySw1();}
+boolean page2SoftkeyStatus2() {}
+// SOFT-KEY 3 
+String   page2SoftkeyLabel3 = "   ";              // 3 characters
+void  page2SoftkeyFunction3() {}
+boolean page2SoftkeyStatus3() {}
+// SOFT-KEY 4 
+String   page2SoftkeyLabel4 = "    M2";           // 6 characters
+void  page2SoftkeyFunction4() {pressKeySw2();}
+boolean page2SoftkeyStatus4() {}
+// SOFT-KEY 5 
+String   page2SoftkeyLabel5 = " M3";              // 3 characters
+void  page2SoftkeyFunction5() {pressKeySw3();}
+boolean page2SoftkeyStatus5() {}
+// SOFT-KEY 6
+String   page2SoftkeyLabel6 = " M4";              // 3 characters
+void  page2SoftkeyFunction6() {pressKeySw4();}
+boolean page2SoftkeyStatus6() {}
+
+
 void setup(void) 
 {
   // Start serial
@@ -147,6 +184,16 @@ void setup(void)
   pinMode(sw7pin, INPUT_PULLUP);
   pinMode(sw8pin, INPUT_PULLUP);
   pinMode(sw9pin, INPUT_PULLUP);
+  pinMode(keySw1, OUTPUT);
+  pinMode(keySw2, OUTPUT);
+  pinMode(keySw3, OUTPUT);
+  pinMode(keySw4, OUTPUT);
+
+  digitalWrite(backlightPin, LOW);
+  digitalWrite(keySw1, LOW);
+  digitalWrite(keySw2, LOW);
+  digitalWrite(keySw3, LOW);
+  digitalWrite(keySw4, LOW);
 
   // Initialize Display
   display.begin();
@@ -249,6 +296,17 @@ void loop()  // MAIN LOOP
       else if (button == 6) { page1SoftkeyFunction6(); }
       button = 0;  // reset button variable to zero once we've used it
     }
+    else if (currentPage == 2)
+    {
+      if (button == 0) {}
+      else if (button == 1) { page2SoftkeyFunction1(); }
+      else if (button == 2) { page2SoftkeyFunction2(); }
+      else if (button == 3) { page2SoftkeyFunction3(); }
+      else if (button == 4) { page2SoftkeyFunction4(); }
+      else if (button == 5) { page2SoftkeyFunction5(); }
+      else if (button == 6) { page2SoftkeyFunction6(); }
+      button = 0;  // reset button variable to zero once we've used it
+    }
 
     // FAST REFRESH STATUS DISPLAY ITEMS
 
@@ -319,6 +377,15 @@ else if (currentPage == 1)
   softkeyStatus[3] = page1SoftkeyStatus4();
   softkeyStatus[4] = page1SoftkeyStatus5();
   softkeyStatus[5] = page1SoftkeyStatus6();
+}
+else if (currentPage == 2)
+{
+  softkeyStatus[0] = page2SoftkeyStatus1();
+  softkeyStatus[1] = page2SoftkeyStatus2();
+  softkeyStatus[2] = page2SoftkeyStatus3();
+  softkeyStatus[3] = page2SoftkeyStatus4();
+  softkeyStatus[4] = page2SoftkeyStatus5();
+  softkeyStatus[5] = page2SoftkeyStatus6();
 }
 
 // Display the soft-key status indicators
@@ -465,7 +532,7 @@ ISR(TIMER1_COMPA_vect)
 // Cycle through soft-key pages
 void changePage()
 {
-  currentPage = ++currentPage % 2;  // 2 pages
+  currentPage = ++currentPage % 3;  // 2 pages
   // Label the soft keys
   // may update this when I implement multiple pages of soft-keys...
   if (currentPage == 0)
@@ -511,6 +578,28 @@ void changePage()
     //Button 6
     display.setCursor(62, 22);
     display.print(page1SoftkeyLabel6);
+  }
+  else if (currentPage ==2)
+  {
+    display.setTextSize(1);
+    //Button 1
+    display.setCursor(5, 0);
+    display.print(page2SoftkeyLabel1);
+    //Button 2
+    display.setCursor(5, 11);
+    display.print(page2SoftkeyLabel2);
+    //Button 3
+    display.setCursor(5, 22);
+    display.print(page2SoftkeyLabel3);
+    //Button 4
+    display.setCursor(44, 0);
+    display.print(page2SoftkeyLabel4);
+    //Button 5
+    display.setCursor(62, 11);
+    display.print(page2SoftkeyLabel5);
+    //Button 6
+    display.setCursor(62, 22);
+    display.print(page2SoftkeyLabel6);
   }
 }
 
@@ -570,6 +659,42 @@ void tuneSignalOff()
   radio.setMode(modeReturn);
 }
 
+
+
+void pressKeySw1()
+{
+  digitalWrite(keySw1, HIGH);
+  delay(200);
+  digitalWrite(keySw1, LOW);
+}
+
+void pressKeySw2()
+{
+  digitalWrite(keySw2, HIGH);
+  delay(200);
+  digitalWrite(keySw2, LOW);
+}
+
+void pressKeySw3()
+{
+  digitalWrite(keySw3, HIGH);
+  delay(200);
+  digitalWrite(keySw3, LOW);
+}
+
+void pressKeySw4()
+{
+  digitalWrite(keySw4, HIGH);
+  delay(200);
+  digitalWrite(keySw4, LOW);
+}
+
+void longPressKeySw1()
+{
+  digitalWrite(keySw1, HIGH);
+  delay(1500);
+  digitalWrite(keySw1, LOW);
+}
 
 
 
