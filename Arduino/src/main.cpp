@@ -76,6 +76,7 @@ bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
 void displayABCkeys();
+void displaySoftKeyStatus();
 void getReadableMode();
 void backlight();
 void changePage();
@@ -274,39 +275,61 @@ void loop()  // MAIN LOOP
   //  sMeter = radioCAT.getByte();
   //  sMeter = sMeter << 4; //left shift the bits by 4 to make this an S-meter byte ranging from 00000000 to 11110000
 
+  // BUTTON ACTIONS
+
+  // If user has pushed one of the soft-keys (1-6)
     if (currentPage == 0)
     {
       if (button == 0) {}
-      else if (button == 1) { page0SoftkeyFunction1(); }
-      else if (button == 2) { page0SoftkeyFunction2(); }
-      else if (button == 3) { page0SoftkeyFunction3(); }
-      else if (button == 4) { page0SoftkeyFunction4(); }
-      else if (button == 5) { page0SoftkeyFunction5(); }
-      else if (button == 6) { page0SoftkeyFunction6(); }
+      else if (button == 1) { page0SoftkeyFunction1(); softkeyStatus[0] = page0SoftkeyStatus1();}
+      else if (button == 2) { page0SoftkeyFunction2(); softkeyStatus[1] = page0SoftkeyStatus2();}
+      else if (button == 3) { page0SoftkeyFunction3(); softkeyStatus[2] = page0SoftkeyStatus3();}
+      else if (button == 4) { page0SoftkeyFunction4(); softkeyStatus[3] = page0SoftkeyStatus4();}
+      else if (button == 5) { page0SoftkeyFunction5(); softkeyStatus[4] = page0SoftkeyStatus5();}
+      else if (button == 6) { page0SoftkeyFunction6(); softkeyStatus[5] = page0SoftkeyStatus6();}
       button = 0;  // reset button variable to zero once we've used it
+      displaySoftKeyStatus();
     }
     else if (currentPage == 1)
     {
       if (button == 0) {}
-      else if (button == 1) { page1SoftkeyFunction1(); }
-      else if (button == 2) { page1SoftkeyFunction2(); }
-      else if (button == 3) { page1SoftkeyFunction3(); }
-      else if (button == 4) { page1SoftkeyFunction4(); }
-      else if (button == 5) { page1SoftkeyFunction5(); }
-      else if (button == 6) { page1SoftkeyFunction6(); }
+      else if (button == 1) { page1SoftkeyFunction1(); softkeyStatus[0] = page1SoftkeyStatus1();}
+      else if (button == 2) { page1SoftkeyFunction2(); softkeyStatus[1] = page1SoftkeyStatus2();}
+      else if (button == 3) { page1SoftkeyFunction3(); softkeyStatus[2] = page1SoftkeyStatus3();}
+      else if (button == 4) { page1SoftkeyFunction4(); softkeyStatus[3] = page1SoftkeyStatus4();}
+      else if (button == 5) { page1SoftkeyFunction5(); softkeyStatus[4] = page1SoftkeyStatus5();}
+      else if (button == 6) { page1SoftkeyFunction6(); softkeyStatus[5] = page1SoftkeyStatus6();}
       button = 0;  // reset button variable to zero once we've used it
+      displaySoftKeyStatus();
     }
     else if (currentPage == 2)
     {
       if (button == 0) {}
-      else if (button == 1) { page2SoftkeyFunction1(); }
-      else if (button == 2) { page2SoftkeyFunction2(); }
-      else if (button == 3) { page2SoftkeyFunction3(); }
-      else if (button == 4) { page2SoftkeyFunction4(); }
-      else if (button == 5) { page2SoftkeyFunction5(); }
-      else if (button == 6) { page2SoftkeyFunction6(); }
+      else if (button == 1) { page2SoftkeyFunction1(); softkeyStatus[0] = page2SoftkeyStatus1();}
+      else if (button == 2) { page2SoftkeyFunction2(); softkeyStatus[1] = page2SoftkeyStatus2();}
+      else if (button == 3) { page2SoftkeyFunction3(); softkeyStatus[2] = page2SoftkeyStatus3();}
+      else if (button == 4) { page2SoftkeyFunction4(); softkeyStatus[3] = page2SoftkeyStatus4();}
+      else if (button == 5) { page2SoftkeyFunction5(); softkeyStatus[4] = page2SoftkeyStatus5();}
+      else if (button == 6) { page2SoftkeyFunction6(); softkeyStatus[5] = page2SoftkeyStatus6();}
       button = 0;  // reset button variable to zero once we've used it
+      displaySoftKeyStatus();
     }
+
+  if (sw7status == LOW)   // PAGE button
+  {
+    changePage();
+    delay(200);           // short delay to prevent occasional "double-press"
+    sw7status = HIGH;     // reset sw7status to high
+  }
+
+  if (sw8status == LOW)   // LIGHT button
+  {
+    backlight();
+    delay(200);           // short delay to prevent occasional "double-press"
+    sw8status = HIGH;     // reset sw8status to high
+  }
+
+  sw9status = HIGH;     // reset sw9status to high
 
     // FAST REFRESH STATUS DISPLAY ITEMS
 
@@ -345,122 +368,6 @@ void loop()  // MAIN LOOP
   
 // SLOW REFRESH STUFF
 
-  if (sw7status == LOW)   // PAGE button
-  {
-    changePage();
-    delay(200);           // short delay to prevent occasional "double-press"
-    sw7status = HIGH;     // reset sw7status to high
-  }
-
-  if (sw8status == LOW)   // LIGHT button
-  {
-    backlight();
-    delay(200);           // short delay to prevent occasional "double-press"
-    sw8status = HIGH;     // reset sw8status to high
-  }
-
-// Update the soft-key status indicators
-if (currentPage == 0)
-{
-  softkeyStatus[0] = page0SoftkeyStatus1();
-  softkeyStatus[1] = page0SoftkeyStatus2();
-  softkeyStatus[2] = page0SoftkeyStatus3();
-  softkeyStatus[3] = page0SoftkeyStatus4();
-  softkeyStatus[4] = page0SoftkeyStatus5();
-  softkeyStatus[5] = page0SoftkeyStatus6();
-}
-else if (currentPage == 1)
-{
-  softkeyStatus[0] = page1SoftkeyStatus1();
-  softkeyStatus[1] = page1SoftkeyStatus2();
-  softkeyStatus[2] = page1SoftkeyStatus3();
-  softkeyStatus[3] = page1SoftkeyStatus4();
-  softkeyStatus[4] = page1SoftkeyStatus5();
-  softkeyStatus[5] = page1SoftkeyStatus6();
-}
-else if (currentPage == 2)
-{
-  softkeyStatus[0] = page2SoftkeyStatus1();
-  softkeyStatus[1] = page2SoftkeyStatus2();
-  softkeyStatus[2] = page2SoftkeyStatus3();
-  softkeyStatus[3] = page2SoftkeyStatus4();
-  softkeyStatus[4] = page2SoftkeyStatus5();
-  softkeyStatus[5] = page2SoftkeyStatus6();
-}
-
-// Display the soft-key status indicators
-if (softkeyStatus[0])
-{
-  display.drawFastVLine(0, 0, 9, BLACK);
-  display.drawFastVLine(1, 0, 9, BLACK);
-  display.drawFastVLine(2, 0, 9, BLACK);
-}
-else
-{
-  display.drawFastVLine(0, 0, 9, WHITE);
-  display.drawFastVLine(1, 0, 9, WHITE);
-  display.drawFastVLine(2, 0, 9, WHITE);
-}
-if (softkeyStatus[1])
-{
-  display.drawFastVLine(0, 10, 10, BLACK);
-  display.drawFastVLine(1, 10, 10, BLACK);
-  display.drawFastVLine(2, 10, 10, BLACK);
-}
-else
-{
-  display.drawFastVLine(0, 10, 10, WHITE);
-  display.drawFastVLine(1, 10, 10, WHITE);
-  display.drawFastVLine(2, 10, 10, WHITE);
-}
-if (softkeyStatus[2])
-{
-  display.drawFastVLine(0, 21, 9, BLACK);
-  display.drawFastVLine(1, 21, 9, BLACK);
-  display.drawFastVLine(2, 21, 9, BLACK);
-}
-else
-{
-  display.drawFastVLine(0, 21, 9, WHITE);
-  display.drawFastVLine(1, 21, 9, WHITE);
-  display.drawFastVLine(2, 21, 9, WHITE);
-}
-if (softkeyStatus[3])
-{
-  display.drawFastVLine(83, 0, 9, BLACK);
-  display.drawFastVLine(82, 0, 9, BLACK);
-  display.drawFastVLine(81, 0, 9, BLACK);
-}
-else
-{
-  display.drawFastVLine(83, 0, 9, WHITE);
-  display.drawFastVLine(82, 0, 9, WHITE);
-  display.drawFastVLine(81, 0, 9, WHITE);
-}
-if (softkeyStatus[4])
-{
-  display.drawFastVLine(83, 10, 10, BLACK);
-  display.drawFastVLine(82, 10, 10, BLACK);
-  display.drawFastVLine(81, 10, 10, BLACK);
-}
-else
-{
-  display.drawFastVLine(83, 10, 10, WHITE);
-  display.drawFastVLine(82, 10, 10, WHITE);
-  display.drawFastVLine(81, 10, 10, WHITE);
-}
-if (softkeyStatus[5])
-{
-  display.drawFastVLine(83, 21, 9, BLACK);
-  display.drawFastVLine(82, 21, 9, BLACK);
-  display.drawFastVLine(81, 21, 9, BLACK);
-}
-else
-{
-  display.drawFastVLine(83, 21, 9, WHITE);
-  display.drawFastVLine(82, 21, 9, WHITE);
-  display.drawFastVLine(81, 21, 9, WHITE);
-}
 
 // Timed backlight countdown operation
 if(timedBacklight == true)
@@ -478,8 +385,6 @@ if(timedBacklight == true)
 }
 
 display.display();  // update display
-
-sw9status = HIGH;     // reset sw9status to high
 
 #endif
 }  // END OF MAIN LOOP
@@ -600,6 +505,112 @@ void changePage()
     //Button 6
     display.setCursor(62, 22);
     display.print(page2SoftkeyLabel6);
+  }
+
+  // Update the soft-key status indicators
+  if (currentPage == 0)
+  {
+    softkeyStatus[0] = page0SoftkeyStatus1();
+    softkeyStatus[1] = page0SoftkeyStatus2();
+    softkeyStatus[2] = page0SoftkeyStatus3();
+    softkeyStatus[3] = page0SoftkeyStatus4();
+    softkeyStatus[4] = page0SoftkeyStatus5();
+    softkeyStatus[5] = page0SoftkeyStatus6();
+  }
+  else if (currentPage == 1)
+  {
+    softkeyStatus[0] = page1SoftkeyStatus1();
+    softkeyStatus[1] = page1SoftkeyStatus2();
+    softkeyStatus[2] = page1SoftkeyStatus3();
+    softkeyStatus[3] = page1SoftkeyStatus4();
+    softkeyStatus[4] = page1SoftkeyStatus5();
+    softkeyStatus[5] = page1SoftkeyStatus6();
+  }
+  else if (currentPage == 2)
+  {
+    softkeyStatus[0] = page2SoftkeyStatus1();
+    softkeyStatus[1] = page2SoftkeyStatus2();
+    softkeyStatus[2] = page2SoftkeyStatus3();
+    softkeyStatus[3] = page2SoftkeyStatus4();
+    softkeyStatus[4] = page2SoftkeyStatus5();
+    softkeyStatus[5] = page2SoftkeyStatus6();
+  }
+}
+
+void displaySoftKeyStatus()
+{
+  // Display the soft-key status indicators
+  if (softkeyStatus[0])
+  {
+    display.drawFastVLine(0, 0, 9, BLACK);
+    display.drawFastVLine(1, 0, 9, BLACK);
+    display.drawFastVLine(2, 0, 9, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(0, 0, 9, WHITE);
+    display.drawFastVLine(1, 0, 9, WHITE);
+    display.drawFastVLine(2, 0, 9, WHITE);
+  }
+  if (softkeyStatus[1])
+  {
+    display.drawFastVLine(0, 10, 10, BLACK);
+    display.drawFastVLine(1, 10, 10, BLACK);
+    display.drawFastVLine(2, 10, 10, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(0, 10, 10, WHITE);
+    display.drawFastVLine(1, 10, 10, WHITE);
+    display.drawFastVLine(2, 10, 10, WHITE);
+  }
+  if (softkeyStatus[2])
+  {
+    display.drawFastVLine(0, 21, 9, BLACK);
+    display.drawFastVLine(1, 21, 9, BLACK);
+    display.drawFastVLine(2, 21, 9, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(0, 21, 9, WHITE);
+    display.drawFastVLine(1, 21, 9, WHITE);
+    display.drawFastVLine(2, 21, 9, WHITE);
+  }
+  if (softkeyStatus[3])
+  {
+    display.drawFastVLine(83, 0, 9, BLACK);
+    display.drawFastVLine(82, 0, 9, BLACK);
+    display.drawFastVLine(81, 0, 9, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(83, 0, 9, WHITE);
+    display.drawFastVLine(82, 0, 9, WHITE);
+    display.drawFastVLine(81, 0, 9, WHITE);
+  }
+  if (softkeyStatus[4])
+  {
+    display.drawFastVLine(83, 10, 10, BLACK);
+    display.drawFastVLine(82, 10, 10, BLACK);
+    display.drawFastVLine(81, 10, 10, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(83, 10, 10, WHITE);
+    display.drawFastVLine(82, 10, 10, WHITE);
+    display.drawFastVLine(81, 10, 10, WHITE);
+  }
+  if (softkeyStatus[5])
+  {
+    display.drawFastVLine(83, 21, 9, BLACK);
+    display.drawFastVLine(82, 21, 9, BLACK);
+    display.drawFastVLine(81, 21, 9, BLACK);
+  }
+  else
+  {
+    display.drawFastVLine(83, 21, 9, WHITE);
+    display.drawFastVLine(82, 21, 9, WHITE);
+    display.drawFastVLine(81, 21, 9, WHITE);
   }
 }
 
