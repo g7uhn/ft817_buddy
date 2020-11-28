@@ -19,9 +19,9 @@ Don't forget to include the non-standard ft817 library, found under ft817_buddy/
 - Toggle VFO A/B
 - Set FT-817 internal keyer to preset wpm (12, 15, 18 in my case)
 - External keyer: [K1EL K16 chip](https://hamcrafters2.com/files/k16man_R10.pdf) integration
--- Command and M1, M2, M3, M4 buttons
--- Onboard piezo buzzer and LED for K16 feedback
--- Control speed using CMD+paddle (K1EL's "Fast Speed Change" feature)
+  - Command and M1, M2, M3, M4 buttons
+  - Onboard piezo buzzer and LED for K16 feedback
+  - Control speed using CMD+paddle (K1EL's "Fast Speed Change" feature)
 
 ### Licence
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
