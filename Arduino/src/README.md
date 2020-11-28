@@ -4,4 +4,13 @@ This sketch has been built using Visual Studio Code / PlatformIO IDE (instead of
 
 Don't forget to include the non-standard ft817 library, found under ft817_buddy/Arduino/lib/
 
+### Current features
+
+- Display current frequency and mode
+- Display current A,B,C key functions
+- 3 pages of 6 soft-keys
+- Backlight
+
+
+### Licence
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
