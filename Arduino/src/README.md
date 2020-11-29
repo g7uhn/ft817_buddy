@@ -2,7 +2,7 @@ The main Arduino sketch for the FT-817 Buddy project.
 
 This sketch has been built using Visual Studio Code / PlatformIO IDE (instead of Arduino IDE).  If you want to load this code into Arduino IDE you probably just need to remove the #include <Arduino.h> line at the top of the sketch, Google is your friend.  But it's much nicer to work in VSC/PlatformIO, it's a nice step forward from the Arduino IDE.
 
-Don't forget to include the non-standard ft817 library, found under ft817_buddy/Arduino/lib/
+Don't forget to inmport the non-standard ft817 library into your IDE, found under ft817_buddy/Arduino/lib/
 
 ### Current features
 
@@ -24,4 +24,4 @@ Don't forget to include the non-standard ft817 library, found under ft817_buddy/
   - Control speed using CMD+paddle (K1EL's "Fast Speed Change" feature)
 
 ### Licence
-This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
