@@ -150,21 +150,21 @@ boolean page1SoftkeyStatus6() {}
 
 // Page2 items
 // SOFT-KEY 1 
-String   page2SoftkeyLabel1 = "M1    ";           // 6 characters
-void  page2SoftkeyFunction1() {pressKeySw1();}
+String   page2SoftkeyLabel1 = "CMD   ";           // 6 characters
+void  page2SoftkeyFunction1() {longPressKeySw1();}
 boolean page2SoftkeyStatus1() {}
 // SOFT-KEY 2 
-String   page2SoftkeyLabel2 = "CMD";              // 3 characters
-void  page2SoftkeyFunction2() {longPressKeySw1();}
+String   page2SoftkeyLabel2 = "M1 ";              // 3 characters
+void  page2SoftkeyFunction2() {pressKeySw1();}
 boolean page2SoftkeyStatus2() {}
 // SOFT-KEY 3 
-String   page2SoftkeyLabel3 = "   ";              // 3 characters
-void  page2SoftkeyFunction3() {}
+String   page2SoftkeyLabel3 = "M2 ";              // 3 characters
+void  page2SoftkeyFunction3() {pressKeySw2();}
 boolean page2SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page2SoftkeyLabel4 = "    M2";           // 6 characters
-void  page2SoftkeyFunction4() {pressKeySw2();}
-boolean page2SoftkeyStatus4() {}
+String   page2SoftkeyLabel4 = "   NAR";           // 6 characters
+void  page2SoftkeyFunction4() {radio.toggleNar();}
+boolean page2SoftkeyStatus4() {return radio.getNar();}
 // SOFT-KEY 5 
 String   page2SoftkeyLabel5 = " M3";              // 3 characters
 void  page2SoftkeyFunction5() {pressKeySw3();}
