@@ -45,10 +45,10 @@ FT817 radio;              // define “radio” so that we may pass CAT and EEPR
 #define sw7pin 2           // SW7 input is D2
 #define sw8pin 10          // SW8 input is D10
 #define sw9pin 9           // SW9 input is D9
-#define keySw1 15          // A1 (pin 15) is Keyer SW1
-#define keySw2 16          // A1 (pin 16) is Keyer SW2
-#define keySw3 17          // A1 (pin 17) is Keyer SW3
-#define keySw4 18          // A1 (pin 18) is Keyer SW4
+#define keyerSw1 15          // A1 (pin 15) is Keyer SW1
+#define keyerSw2 16          // A1 (pin 16) is Keyer SW2
+#define keyerSw3 17          // A1 (pin 17) is Keyer SW3
+#define keyerSw4 18          // A1 (pin 18) is Keyer SW4
 
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
@@ -82,11 +82,11 @@ void backlight();
 void changePage();
 void tuneSignalOn();
 void tuneSignalOff();
-void pressKeySw1();
-void pressKeySw2();
-void pressKeySw3();
-void pressKeySw4();
-void longPressKeySw1();
+void pressKeyerSw1();
+void pressKeyerSw2();
+void pressKeyerSw3();
+void pressKeyerSw4();
+void longPressKeyerSw1();
 unsigned char ToByte(bool b[8]);  // debug aid, to be removed when unused
 
 
@@ -151,15 +151,15 @@ boolean page1SoftkeyStatus6() {}
 // Page2 items
 // SOFT-KEY 1 
 String   page2SoftkeyLabel1 = "CMD   ";           // 6 characters
-void  page2SoftkeyFunction1() {longPressKeySw1();}
+void  page2SoftkeyFunction1() {longPressKeyerSw1();}
 boolean page2SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page2SoftkeyLabel2 = "M1 ";              // 3 characters
-void  page2SoftkeyFunction2() {pressKeySw1();}
+void  page2SoftkeyFunction2() {pressKeyerSw1();}
 boolean page2SoftkeyStatus2() {}
 // SOFT-KEY 3 
 String   page2SoftkeyLabel3 = "M2 ";              // 3 characters
-void  page2SoftkeyFunction3() {pressKeySw2();}
+void  page2SoftkeyFunction3() {pressKeyerSw2();}
 boolean page2SoftkeyStatus3() {}
 // SOFT-KEY 4 
 String   page2SoftkeyLabel4 = "   NAR";           // 6 characters
@@ -167,11 +167,11 @@ void  page2SoftkeyFunction4() {radio.toggleNar();}
 boolean page2SoftkeyStatus4() {return radio.getNar();}
 // SOFT-KEY 5 
 String   page2SoftkeyLabel5 = " M3";              // 3 characters
-void  page2SoftkeyFunction5() {pressKeySw3();}
+void  page2SoftkeyFunction5() {pressKeyerSw3();}
 boolean page2SoftkeyStatus5() {}
 // SOFT-KEY 6
 String   page2SoftkeyLabel6 = " M4";              // 3 characters
-void  page2SoftkeyFunction6() {pressKeySw4();}
+void  page2SoftkeyFunction6() {pressKeyerSw4();}
 boolean page2SoftkeyStatus6() {}
 
 
@@ -185,16 +185,16 @@ void setup(void)
   pinMode(sw7pin, INPUT_PULLUP);
   pinMode(sw8pin, INPUT_PULLUP);
   pinMode(sw9pin, INPUT_PULLUP);
-  pinMode(keySw1, OUTPUT);
-  pinMode(keySw2, OUTPUT);
-  pinMode(keySw3, OUTPUT);
-  pinMode(keySw4, OUTPUT);
+  pinMode(keyerSw1, OUTPUT);
+  pinMode(keyerSw2, OUTPUT);
+  pinMode(keyerSw3, OUTPUT);
+  pinMode(keyerSw4, OUTPUT);
 
   digitalWrite(backlightPin, LOW);
-  digitalWrite(keySw1, LOW);
-  digitalWrite(keySw2, LOW);
-  digitalWrite(keySw3, LOW);
-  digitalWrite(keySw4, LOW);
+  digitalWrite(keyerSw1, LOW);
+  digitalWrite(keyerSw2, LOW);
+  digitalWrite(keyerSw3, LOW);
+  digitalWrite(keyerSw4, LOW);
 
   // Initialize Display
   display.begin();
@@ -640,6 +640,43 @@ void backlight()
 }
 
 
+// Functions to trigger K1EL K16 keyer button input
+void pressKeyerSw1()
+{
+  digitalWrite(keyerSw1, HIGH);
+  delay(200);
+  digitalWrite(keyerSw1, LOW);
+}
+
+void pressKeyerSw2()
+{
+  digitalWrite(keyerSw2, HIGH);
+  delay(200);
+  digitalWrite(keyerSw2, LOW);
+}
+
+void pressKeyerSw3()
+{
+  digitalWrite(keyerSw3, HIGH);
+  delay(200);
+  digitalWrite(keyerSw3, LOW);
+}
+
+void pressKeyerSw4()
+{
+  digitalWrite(keyerSw4, HIGH);
+  delay(200);
+  digitalWrite(keyerSw4, LOW);
+}
+
+void longPressKeyerSw1()    // long press of KeyerSw1 = "CMD"
+{
+  digitalWrite(keyerSw1, HIGH);
+  delay(1600);
+  digitalWrite(keyerSw1, LOW);
+}
+
+
 // USER FUNCTIONS
 // Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
 // or, if the desired function is a combination of actions, define a function below to be called by the sketch.
@@ -668,43 +705,6 @@ void tuneSignalOff()
   delay(200);
   // Set mode to <retrieve from modeReturn>
   radio.setMode(modeReturn);
-}
-
-
-
-void pressKeySw1()
-{
-  digitalWrite(keySw1, HIGH);
-  delay(200);
-  digitalWrite(keySw1, LOW);
-}
-
-void pressKeySw2()
-{
-  digitalWrite(keySw2, HIGH);
-  delay(200);
-  digitalWrite(keySw2, LOW);
-}
-
-void pressKeySw3()
-{
-  digitalWrite(keySw3, HIGH);
-  delay(200);
-  digitalWrite(keySw3, LOW);
-}
-
-void pressKeySw4()
-{
-  digitalWrite(keySw4, HIGH);
-  delay(200);
-  digitalWrite(keySw4, LOW);
-}
-
-void longPressKeySw1()
-{
-  digitalWrite(keySw1, HIGH);
-  delay(1500);
-  digitalWrite(keySw1, LOW);
 }
 
 
