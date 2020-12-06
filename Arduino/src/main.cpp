@@ -75,19 +75,18 @@ bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
-void displayABCkeys();
-void displaySoftKeyStatus();
-void getReadableMode();
-void backlight();
-void changePage();
-void tuneSignalOn();
-void tuneSignalOff();
-void pressKeyerSw1();
-void pressKeyerSw2();
-void pressKeyerSw3();
-void pressKeyerSw4();
-void longPressKeyerSw1();
-unsigned char ToByte(bool b[8]);  // debug aid, to be removed when unused
+void displayABCkeys();        // EEPROM read
+void displaySoftKeyStatus();  // possible EEPROM reads
+void getReadableMode();       // standard CAT command
+void backlight();             // no FT-817 interaction
+void changePage();            // no FT-817 interaction
+void tuneSignalOn();          // standard CAT commands
+void tuneSignalOff();         // standard CAT commands
+void pressKeyerSw1();         // no FT-817 interaction
+void pressKeyerSw2();         // no FT-817 interaction
+void pressKeyerSw3();         // no FT-817 interaction
+void pressKeyerSw4();         // no FT-817 interaction
+void longPressKeyerSw1();     // no FT-817 interaction
 
 
 // SETUP SOFT-KEY PAGES
@@ -102,29 +101,29 @@ void  page0SoftkeyFunction1() {tuneSignalOn();}
 boolean page0SoftkeyStatus1() {}
 // SOFT-KEY 2
 String   page0SoftkeyLabel2 = "IPO";              // 3 characters
-void  page0SoftkeyFunction2() {radio.toggleIPO();}
-boolean page0SoftkeyStatus2() {return radio.getIPO();}
+void  page0SoftkeyFunction2() {radio.toggleIPO();}          // EEPROM write
+boolean page0SoftkeyStatus2() {return radio.getIPO();}      // EEPROM read
 // SOFT-KEY 3 
 String   page0SoftkeyLabel3 = "KYR";              // 3 characters
-void  page0SoftkeyFunction3() {radio.toggleKeyer();}
-boolean page0SoftkeyStatus3() {return radio.getKeyer();}
+void  page0SoftkeyFunction3() {radio.toggleKeyer();}        // EEPROM write
+boolean page0SoftkeyStatus3() {return radio.getKeyer();}    // EEPROM read
 // SOFT-KEY 4 
 String   page0SoftkeyLabel4 = "TUNoff";           // 6 characters
 void  page0SoftkeyFunction4() {tuneSignalOff();}
 boolean page0SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page0SoftkeyLabel5 = " BK";              // 3 characters
-void  page0SoftkeyFunction5() {radio.toggleBreakIn();}
-boolean page0SoftkeyStatus5() {return radio.getBreakIn();}
+void  page0SoftkeyFunction5() {radio.toggleBreakIn();}      // EEPROM write
+boolean page0SoftkeyStatus5() {return radio.getBreakIn();}  // EEPROM read
 // SOFT-KEY 6 
 String   page0SoftkeyLabel6 = "NAR";              // 3 characters
-void  page0SoftkeyFunction6() {radio.toggleNar();}
-boolean page0SoftkeyStatus6() {return radio.getNar();}
+void  page0SoftkeyFunction6() {radio.toggleNar();}          // EEPROM write
+boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
 
 // Page1 items
 // SOFT-KEY 1 
 String   page1SoftkeyLabel1 = "RF/SQL";           // 6 characters
-void  page1SoftkeyFunction1() {radio.toggleRfSql();}
+void  page1SoftkeyFunction1() {radio.toggleRfSql();}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page1SoftkeyLabel2 = "A/B";              // 3 characters
@@ -136,15 +135,15 @@ void  page1SoftkeyFunction3() {}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
 String   page1SoftkeyLabel4 = "   k12";           // 6 characters
-void  page1SoftkeyFunction4() {radio.setKeyerSpeed(12);}
+void  page1SoftkeyFunction4() {radio.setKeyerSpeed(12);}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page1SoftkeyLabel5 = "k15";              // 3 characters
-void  page1SoftkeyFunction5() {radio.setKeyerSpeed(15);}
+void  page1SoftkeyFunction5() {radio.setKeyerSpeed(15);}    // EEPROM write
 boolean page1SoftkeyStatus5() {}
 // SOFT-KEY 6
 String   page1SoftkeyLabel6 = "k18";              // 3 characters
-void  page1SoftkeyFunction6() {radio.setKeyerSpeed(18);}
+void  page1SoftkeyFunction6() {radio.setKeyerSpeed(18);}    // EEPROM write
 boolean page1SoftkeyStatus6() {}
 
 
@@ -709,7 +708,7 @@ void tuneSignalOff()
 
 
 
-void displayABCkeys() 
+void displayABCkeys()   // includes EEPROM read
 {
   byte currentAbcKeys = radio.getDisplaySelection();
 

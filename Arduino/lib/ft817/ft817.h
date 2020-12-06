@@ -341,37 +341,37 @@ class FT817
 		void clar(boolean toggle);		// clar on / clar off
 		void split(boolean toggle);		// split / single
 		void toggleVFO();				// switch to the other VFO
-		bool toggleNar();				// toggle the narrow status for the current VFO, switching
+		bool toggleNar();				// EEPROM write: toggle the narrow status for the current VFO, switching
 										// breifly to the other VFO and back, returns true is success
-		bool toggleIPO();				// toggle the IPO status for the current VFO, switching
+		bool toggleIPO();				// EEPROM write: toggle the IPO status for the current VFO, switching
 										// breifly to the other VFO and back, returns true is success
-		bool toggleBreakIn();			// toggle BreakIn
-		bool toggleKeyer();				// toggle Keyer status
-		bool toggleRfSql();				// toggle RF Gain/SQL control
+		bool toggleBreakIn();			// EEPROM write: toggle BreakIn
+		bool toggleKeyer();				// EEPROM write: toggle Keyer status
+		bool toggleRfSql();				// EEPROM write: toggle RF Gain/SQL control
 
 		// set commands
 		void setFreq(long freq);		// in 10' of hz
 		void setMode(byte mode);		// in text
 		void clarFreq(long freq);		// 
-		void switchVFO(bool vfo);		// 0 = A / 1 = B, checks the actual VFO to know if need to change
+		void switchVFO(bool vfo);		// EEPROM read: 0 = A / 1 = B, checks the actual VFO to know if need to change
 		void rptrOffset(char *ofst);	// "-" / "+" / "s"
 		void rptrOffsetFreq(long freq);
 		void squelch(char * mode);
 		void squelchFreq(unsigned int, char * sqlType);
-		void setKeyerSpeed(int speed);
+		void setKeyerSpeed(int speed);	// EEPROM write
 
 		// get commands
-		bool getVFO();					// return the actual VFO: 0 = A / 1 = B
+		bool getVFO();					// EEPROM read: return the actual VFO: 0 = A / 1 = B
 		byte getMode();					// return a byte with the mode
 		unsigned long getFreqMode();	// in 10' of hz
-		byte getBandVFO(bool);			// return the band (see notes in the header of this file)
+		byte getBandVFO(bool);			// EEPROM read: return the band (see notes in the header of this file)
 		boolean chkTX();				//
-		byte getDisplaySelection();		// return a number that represents the row (see notes in the header of this file)
+		byte getDisplaySelection();		// EEPROM read: return a number that represents the row (see notes in the header of this file)
 		byte getSMeter();				// as a byte (see notes in the header of this file)
-		bool getNar();					// get the actual narrow status for the current VFO
-		bool getIPO();					// get the IPO status for the actual VFO
-		bool getBreakIn();				// get the Break In operation status
-		bool getKeyer();				// toggle Keyer
+		bool getNar();					// EEPROM read: get the actual narrow status for the current VFO
+		bool getIPO();					// EEPROM read: get the IPO status for the actual VFO
+		bool getBreakIn();				// EEPROM read: get the Break In operation status
+		bool getKeyer();				// EEPROM read: get the Keyer state
 
 		// vars
 		bool eepromValidData = false;	// true of false of the last eeprom read will read 3 times
@@ -401,10 +401,10 @@ class FT817
 										// the wrote data.
 		bool getBitFromEEPROM(byte rbit);		// get a bit position from an eeprom address loaded in MSB/LSB
 		bool toggleBitFromEEPROM(byte rbit);	// toggle a bit position from an eeprom address loaded in MSB/LSB
-		bool getBitFromVFO(signed int offset, byte rbit);	// this is a nice trick, it will return the bit
+		bool getBitFromVFO(signed int offset, byte rbit);	// EEPROM read: this is a nice trick, it will return the bit
 															// position you want in the actual VFO with an
 															// offset in bytes...
-		bool toggleBitFromVFO(signed int offset, byte rbit);	// this is another a nice trick, this will allow us to
+		bool toggleBitFromVFO(signed int offset, byte rbit);	// EEPROM write: this is another a nice trick, this will allow us to
 																// toggle any bit position in the offset byte for the actual
 																// base VFO
 
