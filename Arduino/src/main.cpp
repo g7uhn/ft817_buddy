@@ -33,7 +33,7 @@
 #include <Adafruit_PCD8544.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_I2CDevice.h>
-#include <FT817.h>      // https://github.com/stdevPavelmc/ft817/tree/main/lib/ft817 
+#include <ft817.h>
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
