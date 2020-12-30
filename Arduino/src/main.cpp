@@ -222,9 +222,8 @@ void setup(void)
   sei();                                // allow interrupts
 
 
-  // Initial display drawing
+  // Initial draw of the main display by calling changePage()
   drawMainDisplay();
-  // Display the soft keys by calling changePage()
   changePage();
 
 } // end setup
@@ -456,17 +455,18 @@ void changePage()
   if (sw9status == LOW) {  // if SHIFT key is down, draw the location/time page
     expansionPage = 1;
     display.clearDisplay();
-    display.setCursor(10, 11);
+    display.setCursor(0, 0);
     display.println("Placeholder");
     display.println("for GPS info");
   }
   else {
-    if (expansionPage != 1) {           // if we're not coming fromthe expansion page...
+    if (expansionPage != 1) {           // if we're not coming from the expansion page...
       currentPage = ++currentPage % 3;  // ...increment the current page (3 pages)
     }
     else {                              // if we are coming from the expansion page we need to...
-      display.clearDisplay();           // ...clear the display and redraw the main display layout
-      drawMainDisplay();
+      display.clearDisplay();           // ...clear the display
+      display.display();
+      
     }
 
     expansionPage = 0;                  // set expansionPage to false
@@ -747,51 +747,48 @@ void displayABCkeys()   // includes EEPROM read
 {
   byte currentAbcKeys = radio.getDisplaySelection();
 
-  if (currentAbcKeys != abcKeys)
-  {
-    abcKeys = currentAbcKeys;
-    // Print current ABC keys
-    display.setCursor(0, 41);
-    display.setTextSize(1);
-    display.setTextColor(BLACK, WHITE);
-    switch (abcKeys) {
-      case B0000:
-        display.print(" A/B  A=B  SPL");
-        break;
-      case B0001:
-        display.print(" MW   MC   TAG");
-        break;
-      case B0010:
-        display.print(" STO  RCL  PMS");
-        break;
-      case B0011:
-        display.print(" RPT  REV  TON");
-        break;
-      case B0100:
-        display.print(" SCN  PRI  DW ");
-        break;
-      case B0101:
-        display.print(" SSM  SCH  ART");
-        break;
-      case B0110:
-        display.print(" IPO  ATT  NAR");
-        break;
-      case B0111:
-        display.print(" NB   AGC     ");
-        break;
-      case B1000:
-        display.print(" PWR  MTR     ");
-        break;
-      case B1001:
-        display.print(" VOX  BK   KYR");
-        break;
-      case B1010:
-        display.print(" CHG  VLT  DSP");
-        break;
-      case B1011:
-        display.print(" TCH  DCH     ");
-        break;
-    }
+  abcKeys = currentAbcKeys;             // originally this function only updated the display if the abcKeys value changed (was continuously monitored)
+  // Print current ABC keys
+  display.setCursor(0, 41);
+  display.setTextSize(1);
+  display.setTextColor(BLACK, WHITE);
+  switch (abcKeys) {
+    case B0000:
+      display.print(" A/B  A=B  SPL");
+      break;
+    case B0001:
+      display.print(" MW   MC   TAG");
+      break;
+    case B0010:
+      display.print(" STO  RCL  PMS");
+      break;
+    case B0011:
+      display.print(" RPT  REV  TON");
+      break;
+    case B0100:
+      display.print(" SCN  PRI  DW ");
+      break;
+    case B0101:
+      display.print(" SSM  SCH  ART");
+      break;
+    case B0110:
+      display.print(" IPO  ATT  NAR");
+      break;
+    case B0111:
+      display.print(" NB   AGC     ");
+      break;
+    case B1000:
+      display.print(" PWR  MTR     ");
+      break;
+    case B1001:
+      display.print(" VOX  BK   KYR");
+      break;
+    case B1010:
+      display.print(" CHG  VLT  DSP");
+      break;
+    case B1011:
+      display.print(" TCH  DCH     ");
+      break;
   }
 }
 
