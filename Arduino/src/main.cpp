@@ -136,11 +136,11 @@ void  page1SoftkeyFunction1() {radio.toggleRfSql();}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page1SoftkeyLabel2 = "hh-";              // 3 characters
-void  page1SoftkeyFunction2() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; delay(300);}
+void  page1SoftkeyFunction2() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus2() {}
 // SOFT-KEY 3 
 String   page1SoftkeyLabel3 = "mm-";              // 3 characters
-void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; delay(300);}
+void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
 String   page1SoftkeyLabel4 = "      ";           // 6 characters
@@ -148,11 +148,11 @@ void  page1SoftkeyFunction4() {}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page1SoftkeyLabel5 = "hh+";              // 3 characters
-void  page1SoftkeyFunction5() {hh = (hh + 1) % 24; delay(300);}
+void  page1SoftkeyFunction5() {hh = (hh + 1) % 24; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus5() {}
 // SOFT-KEY 6
 String   page1SoftkeyLabel6 = "mm+";              // 3 characters
-void  page1SoftkeyFunction6() {mm = (mm + 1) % 60; delay(300);}
+void  page1SoftkeyFunction6() {mm = (mm + 1) % 60; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus6() {}
 
 
@@ -361,6 +361,12 @@ void loop()  // MAIN LOOP
     //  tft.fillRect(52,120,sMeterWidth,6,WHITE);
     //  tft.fillRect((52+sMeterWidth),120,(74-sMeterWidth),6,BLACK);
 
+    // Format and print time
+    char buffer[6]="";    // This is the buffer for the string the sprintf outputs to
+    sprintf(buffer, "%02d:%02d", hh, mm);
+    display.setCursor(27, 11);
+    display.print(buffer);
+
     delay(200);
 
     // write to display
@@ -380,14 +386,6 @@ if ( millis() - tickOver > 60000) {
   tickOver = millis();
 }
 
-
-// Print time value
-
-// Format and print time
-char buffer[6]="";    // This is the buffer for the string the sprintf outputs to
-sprintf(buffer, "%02d:%02d", hh, mm);
-display.setCursor(27, 11);
-display.print(buffer);
 
 // Timed backlight countdown operation
 if(timedBacklight == true)
