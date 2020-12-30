@@ -364,7 +364,7 @@ void loop()  // MAIN LOOP
     // Format and print time
     char buffer[6]="";    // This is the buffer for the string the sprintf outputs to
     sprintf(buffer, "%02d:%02d", hh, mm);
-    display.setCursor(27, 11);
+    display.setCursor(27, 12);
     display.print(buffer);
 
     // Calculate time value (either uptime or UTC if GPS expansion has updated the values)
