@@ -131,8 +131,8 @@ boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
 
 // Page1 items
 // SOFT-KEY 1 
-String   page1SoftkeyLabel1 = "key=15";           // 6 characters
-void  page1SoftkeyFunction1() {radio.setKeyerSpeed(15);}        // EEPROM write
+String   page1SoftkeyLabel1 = "k13";           // 6 characters
+void  page1SoftkeyFunction1() {radio.setKeyerSpeed(13);}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page1SoftkeyLabel2 = "hh-";              // 3 characters
@@ -143,8 +143,8 @@ String   page1SoftkeyLabel3 = "mm-";              // 3 characters
 void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "key=18";           // 6 characters
-void  page1SoftkeyFunction4() {radio.setKeyerSpeed(18);}    // EEPROM write
+String   page1SoftkeyLabel4 = "k17";           // 6 characters
+void  page1SoftkeyFunction4() {radio.setKeyerSpeed(17);}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page1SoftkeyLabel5 = "hh+";              // 3 characters
@@ -189,7 +189,7 @@ void setup(void)
   radio.begin(38400);         // start the serial port for the CAT library
 
   // Start expansion software serial
-  expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
+  //expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
 
   // Set up some pins
   pinMode(backlightPin, OUTPUT);
@@ -367,6 +367,16 @@ void loop()  // MAIN LOOP
     display.setCursor(27, 11);
     display.print(buffer);
 
+    // Calculate time value (either uptime or UTC if GPS expansion has updated the values)
+    if ( millis() - tickOver > 60000) {
+      if (mm == 59) {
+        hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
+      }
+      mm = (mm + 1) % 60;  // Increment mm modulo 60
+      // What do we do about incrementing the date????????  :-/
+      tickOver = millis();
+    }
+
     delay(200);
 
     // write to display
@@ -375,16 +385,6 @@ void loop()  // MAIN LOOP
   } // END OF FAST REFRESH LOOP (performed 4 times in every main loop)
   
 // SLOW REFRESH STUFF
-
-// Calculate time value (either uptime or UTC if GPS expansion has updated the values)
-if ( millis() - tickOver > 60000) {
-  if (mm == 59) {
-    hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
-  }
-  mm = (mm + 1) % 60;  // Increment mm modulo 60
-  // What do we do about incrementing the date????????  :-/
-  tickOver = millis();
-}
 
 
 // Timed backlight countdown operation
@@ -479,25 +479,14 @@ void changePage()
   if (sw9status == LOW) {  // if SHIFT key is down, draw the location/time expansion page
     expansionPage = 1;
     display.clearDisplay();
-    display.setCursor(0, 0);
-    display.print("DD/MM/YY");
     display.setCursor(0, 11);
-    display.print("UTC");
-
+    display.print("Time:");
     // Time value printed in main loop
 
-    display.setCursor(0, 21);
-    display.print("Lat");
-    display.setCursor(27, 21);
-    display.print("00.00:00");       // Print Latitude value here (global)
     display.setCursor(0, 31);
-    display.print("Long");
-    display.setCursor(27, 31);
-    display.print("000.00:00");      // Print Longitude value here (global)
+    display.print("Page reserved");
     display.setCursor(0, 41);
-    display.print("Locator");
-    display.setCursor(46, 41);
-    display.print("AA00bb");         // Print Locator value here (global)
+    display.print("for expansion!");
   }
   else {
     if (expansionPage != 1) {           // if we're not coming from the expansion page...
