@@ -76,8 +76,10 @@ byte MSB;
 byte LSB;
 int currentPage = 2;    // initialise at the last page
 bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
-int hh = 0;             // clock hour
-int mm = 0;             // clock minute
+short int hh = 0;             // clock hour
+short int mm = 0;             // clock minute
+short int ss = 0;             // clock seconds
+long tickOver = 0;            // a counter to store time values (?)
 
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
@@ -368,8 +370,20 @@ void loop()  // MAIN LOOP
   
 // SLOW REFRESH STUFF
 
-// Print UTC time value
-// Format and print UTC time
+// Calculate time value (either uptime or UTC if GPS expansion has updated the values)
+if ( millis() - tickOver > 60000) {
+  if (mm == 59) {
+    hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
+  }
+  mm = (mm + 1) % 60;  // Increment mm modulo 60
+  // What do we do about incrementing the date????????  :-/
+  tickOver = millis();
+}
+
+
+// Print time value
+
+// Format and print time
 char buffer[6]="";    // This is the buffer for the string the sprintf outputs to
 sprintf(buffer, "%02d:%02d", hh, mm);
 display.setCursor(27, 11);
