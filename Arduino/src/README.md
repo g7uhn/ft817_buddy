@@ -10,6 +10,7 @@ Don't forget to inmport the non-standard ft817 library into your IDE, found unde
 - Display current A,B,C key functions
 - 3 pages of 6 soft-keys
 - Backlight
+- Clock
 - Tune signal on/off (Transmit an AM carrier, suitable for driving auto-ATU)
 - Toggle IPO
 - Toggle NAR filter
