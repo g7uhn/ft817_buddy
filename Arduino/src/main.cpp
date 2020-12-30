@@ -33,11 +33,15 @@
 #include <Adafruit_PCD8544.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_I2CDevice.h>
+#include <SoftwareSerial.h>
 #include <ft817.h>
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
 FT817 radio;              // define “radio” so that we may pass CAT and EEPROM commands
+
+// Expansion software serial port: TX = digital pin 12, RX = digital pin 11
+SoftwareSerial expansion(12,11);
 
 // Define PCB pins
 #define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
@@ -177,7 +181,10 @@ boolean page2SoftkeyStatus6() {}
 void setup(void) 
 {
   // Start serial
-  radio.begin(38400);        // start the serial port for the CAT library
+  radio.begin(38400);         // start the serial port for the CAT library
+
+  // Start expansion software serial
+  expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
 
   // Set up some pins
   pinMode(backlightPin, OUTPUT);
