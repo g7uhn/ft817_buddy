@@ -329,23 +329,27 @@ void loop()  // MAIN LOOP
     // FAST REFRESH STATUS DISPLAY ITEMS
 
     // Print dial frequency
-    display.setCursor(16, 32);
-    display.setTextSize(1);
-    display.setTextColor(BLACK, WHITE);
-    display.print(MHz);
-    display.print(",");
-    if (kHz < 100) display.print('0');
-    if (kHz < 10) display.print('0');
-    display.print(kHz);
-    if (MHz < 100) display.print(' ');
-    if (MHz < 10) display.print(' ');
-    display.print(' ');  // extra character to print over the occasional stray "8"
+    if (expansionPage != 1) {     // don't display freq on the expansion page
+      display.setCursor(16, 32);
+      display.setTextSize(1);
+      display.setTextColor(BLACK, WHITE);
+      display.print(MHz);
+      display.print(",");
+      if (kHz < 100) display.print('0');
+      if (kHz < 10) display.print('0');
+      display.print(kHz);
+      if (MHz < 100) display.print(' ');
+      if (MHz < 10) display.print(' ');
+      display.print(' ');  // extra character to print over the occasional stray "8"
+    }
 
     // Print current mode
-    display.setCursor(27, 22);
-    display.setTextSize(1);
-    display.setTextColor(BLACK, WHITE);
-    display.print(mode);
+    if (expansionPage != 1) {     // don't display mode on the expansion page
+      display.setCursor(27, 22);
+      display.setTextSize(1);
+      display.setTextColor(BLACK, WHITE);
+      display.print(mode);
+    }
 
     //// Print S-meter
     //  tft.setCursor(50,120);
@@ -453,15 +457,27 @@ void drawMainDisplay()
 // Cycle through soft-key pages
 void changePage()
 {
-  if (sw9status == LOW) {  // if SHIFT key is down, draw the location/time page
+  if (sw9status == LOW) {  // if SHIFT key is down, draw the location/time expansion page
     expansionPage = 1;
     display.clearDisplay();
     display.setCursor(0, 0);
     display.print("DD/MM/YY");
-    display.setCursor(5, 22);
-    display.print("UTC:");
-    display.setCursor(27, 22);
-    display.print("00:00");
+    display.setCursor(0, 11);
+    display.print("UTC");
+    display.setCursor(29, 11);
+    display.print("00:00");          // Print time value here (global)
+    display.setCursor(0, 22);
+    display.print("Lat");
+    display.setCursor(29, 22);
+    display.print("00.00:00");       // Print Latitude value here (global)
+    display.setCursor(0, 31);
+    display.print("Long");
+    display.setCursor(29, 31);
+    display.print("000.00:00");      // Print Longitude value here (global)
+    display.setCursor(0, 41);
+    display.print("Locator");
+    display.setCursor(46, 41);
+    display.print("AA00bb");         // Print Locator value here (global)
   }
   else {
     if (expansionPage != 1) {           // if we're not coming from the expansion page...
