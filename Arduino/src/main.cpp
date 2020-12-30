@@ -131,7 +131,7 @@ boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
 
 // Page1 items
 // SOFT-KEY 1 
-String   page1SoftkeyLabel1 = "k13";           // 6 characters
+String   page1SoftkeyLabel1 = "k13   ";           // 6 characters
 void  page1SoftkeyFunction1() {radio.setKeyerSpeed(13);}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
@@ -143,7 +143,7 @@ String   page1SoftkeyLabel3 = "mm-";              // 3 characters
 void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "k17";           // 6 characters
+String   page1SoftkeyLabel4 = "   k17";           // 6 characters
 void  page1SoftkeyFunction4() {radio.setKeyerSpeed(17);}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
