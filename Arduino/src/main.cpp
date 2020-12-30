@@ -98,7 +98,7 @@ void pressKeyerSw4();         // no FT-817 interaction
 void longPressKeyerSw1();     // no FT-817 interaction
 
 
-// SETUP SOFT-KEY PAGES
+/////////////   SETUP YOUR SOFT-KEY PAGES HERE!   ////////////////////////
 // Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
 // or, if the desired function is a combination of actions, define a function in the USER FUNCTIONS section below
 // to be called by the sketch.  Don't forget to forward declare your user function above.
@@ -135,24 +135,24 @@ String   page1SoftkeyLabel1 = "k13   ";           // 6 characters
 void  page1SoftkeyFunction1() {radio.setKeyerSpeed(13);}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
-String   page1SoftkeyLabel2 = "hh-";              // 3 characters
-void  page1SoftkeyFunction2() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; tickOver = millis(); delay(300);}
+String   page1SoftkeyLabel2 = "hh+";              // 3 characters
+void  page1SoftkeyFunction2() {hh = (hh + 1) % 24; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus2() {}
 // SOFT-KEY 3 
-String   page1SoftkeyLabel3 = "mm-";              // 3 characters
-void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; tickOver = millis(); delay(300);}
+String   page1SoftkeyLabel3 = "hh-";              // 3 characters
+void  page1SoftkeyFunction3() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
 String   page1SoftkeyLabel4 = "   k17";           // 6 characters
 void  page1SoftkeyFunction4() {radio.setKeyerSpeed(17);}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
-String   page1SoftkeyLabel5 = "hh+";              // 3 characters
-void  page1SoftkeyFunction5() {hh = (hh + 1) % 24; tickOver = millis(); delay(300);}
+String   page1SoftkeyLabel5 = "mm+";              // 3 characters
+void  page1SoftkeyFunction5() {mm = (mm + 1) % 60; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus5() {}
 // SOFT-KEY 6
-String   page1SoftkeyLabel6 = "mm+";              // 3 characters
-void  page1SoftkeyFunction6() {mm = (mm + 1) % 60; tickOver = millis(); delay(300);}
+String   page1SoftkeyLabel6 = "mm-";              // 3 characters
+void  page1SoftkeyFunction6() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus6() {}
 
 
@@ -181,6 +181,8 @@ boolean page2SoftkeyStatus5() {}
 String   page2SoftkeyLabel6 = " M4";              // 3 characters
 void  page2SoftkeyFunction6() {pressKeyerSw4();}
 boolean page2SoftkeyStatus6() {}
+
+///////////////  END OF SOFT-KEY PAGE SETUP   ////////////////////
 
 
 void setup(void) 
