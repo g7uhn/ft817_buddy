@@ -25,7 +25,7 @@
 */
 
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
-//#define EEPROM_WRITES
+#define EEPROM_WRITES
 
 // Include libraries
 #include <Arduino.h>    // required for PlatformIO IDE (not required if you're using Arduino IDE)
@@ -56,11 +56,12 @@ SoftwareSerial expansion(12,11);
 
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
-bool sw7status = 1;   // using pullup, pressing button takes this low
-bool sw8status = 1;   // using pullup, pressing button takes this low
-bool sw9status = 1;   // using pullup, pressing button takes this low
+bool sw7status = 1;       // using pullup, pressing button takes this low
+bool sw8status = 1;       // using pullup, pressing button takes this low
+bool sw9status = 1;       // using pullup, pressing button takes this low
 bool backlightStatus = 0; // Backlight, initialises as OFF
-bool timedBacklight = 0;
+bool timedBacklight = 0;  // is the Buddy performing a timed backlight operation?
+bool expansionPage = 0;   // is the Buddy displaying the expansion page?
 int backlightCounter = 0;
 long freq;
 String mode;
@@ -453,103 +454,116 @@ void drawMainDisplay()
 // Cycle through soft-key pages
 void changePage()
 {
-  currentPage = ++currentPage % 3;  // 2 pages
-  // Label the soft keys
-  // may update this when I implement multiple pages of soft-keys...
-  if (currentPage == 0)
-  {
-    display.setTextSize(1);
-    //Button 1
-    display.setCursor(5, 0);
-    display.print(page0SoftkeyLabel1);
-    //Button 2
-    display.setCursor(5, 11);
-    display.print(page0SoftkeyLabel2);
-    //Button 3
-    display.setCursor(5, 22);
-    display.print(page0SoftkeyLabel3);
-    //Button 4
-    display.setCursor(44, 0);
-    display.print(page0SoftkeyLabel4);
-    //Button 5
-    display.setCursor(62, 11);
-    display.print(page0SoftkeyLabel5);
-    //Button 6
-    display.setCursor(62, 22);
-    display.print(page0SoftkeyLabel6);
+  if (sw9status == LOW) {  // if SHIFT key is down, draw the location/time page
+    expansionPage = 1;
+    display.clearDisplay();
+    display.setCursor(10, 11);
+    display.println("Placeholder");
+    display.println("for GPS info");
   }
-  else if (currentPage ==1)
-  {
-    display.setTextSize(1);
-    //Button 1
-    display.setCursor(5, 0);
-    display.print(page1SoftkeyLabel1);
-    //Button 2
-    display.setCursor(5, 11);
-    display.print(page1SoftkeyLabel2);
-    //Button 3
-    display.setCursor(5, 22);
-    display.print(page1SoftkeyLabel3);
-    //Button 4
-    display.setCursor(44, 0);
-    display.print(page1SoftkeyLabel4);
-    //Button 5
-    display.setCursor(62, 11);
-    display.print(page1SoftkeyLabel5);
-    //Button 6
-    display.setCursor(62, 22);
-    display.print(page1SoftkeyLabel6);
-  }
-  else if (currentPage ==2)
-  {
-    display.setTextSize(1);
-    //Button 1
-    display.setCursor(5, 0);
-    display.print(page2SoftkeyLabel1);
-    //Button 2
-    display.setCursor(5, 11);
-    display.print(page2SoftkeyLabel2);
-    //Button 3
-    display.setCursor(5, 22);
-    display.print(page2SoftkeyLabel3);
-    //Button 4
-    display.setCursor(44, 0);
-    display.print(page2SoftkeyLabel4);
-    //Button 5
-    display.setCursor(62, 11);
-    display.print(page2SoftkeyLabel5);
-    //Button 6
-    display.setCursor(62, 22);
-    display.print(page2SoftkeyLabel6);
-  }
+  else {
+    if (expansionPage != 1) {           // if we're not on the expansion page...
+      currentPage = ++currentPage % 3;  // ...increment the current page (3 pages)
+    }
+    expansionPage = 0;                  // set expansionPage to false
+    display.clearDisplay();
+    // Label the soft keys
+    // may update this when I implement multiple pages of soft-keys...
+    if (currentPage == 0)
+    {
+      display.setTextSize(1);
+      //Button 1
+      display.setCursor(5, 0);
+      display.print(page0SoftkeyLabel1);
+      //Button 2
+      display.setCursor(5, 11);
+      display.print(page0SoftkeyLabel2);
+      //Button 3
+      display.setCursor(5, 22);
+      display.print(page0SoftkeyLabel3);
+      //Button 4
+      display.setCursor(44, 0);
+      display.print(page0SoftkeyLabel4);
+      //Button 5
+      display.setCursor(62, 11);
+      display.print(page0SoftkeyLabel5);
+      //Button 6
+      display.setCursor(62, 22);
+      display.print(page0SoftkeyLabel6);
+    }
+    else if (currentPage ==1)
+    {
+      display.setTextSize(1);
+      //Button 1
+      display.setCursor(5, 0);
+      display.print(page1SoftkeyLabel1);
+      //Button 2
+      display.setCursor(5, 11);
+      display.print(page1SoftkeyLabel2);
+      //Button 3
+      display.setCursor(5, 22);
+      display.print(page1SoftkeyLabel3);
+      //Button 4
+      display.setCursor(44, 0);
+      display.print(page1SoftkeyLabel4);
+      //Button 5
+      display.setCursor(62, 11);
+      display.print(page1SoftkeyLabel5);
+      //Button 6
+      display.setCursor(62, 22);
+      display.print(page1SoftkeyLabel6);
+    }
+    else if (currentPage ==2)
+    {
+      display.setTextSize(1);
+      //Button 1
+      display.setCursor(5, 0);
+      display.print(page2SoftkeyLabel1);
+      //Button 2
+      display.setCursor(5, 11);
+      display.print(page2SoftkeyLabel2);
+      //Button 3
+      display.setCursor(5, 22);
+      display.print(page2SoftkeyLabel3);
+      //Button 4
+      display.setCursor(44, 0);
+      display.print(page2SoftkeyLabel4);
+      //Button 5
+      display.setCursor(62, 11);
+      display.print(page2SoftkeyLabel5);
+      //Button 6
+      display.setCursor(62, 22);
+      display.print(page2SoftkeyLabel6);
+    }
 
-  // Update the soft-key status indicators
-  if (currentPage == 0)
-  {
-    softkeyStatus[0] = page0SoftkeyStatus1();
-    softkeyStatus[1] = page0SoftkeyStatus2();
-    softkeyStatus[2] = page0SoftkeyStatus3();
-    softkeyStatus[3] = page0SoftkeyStatus4();
-    softkeyStatus[4] = page0SoftkeyStatus5();
-    softkeyStatus[5] = page0SoftkeyStatus6();
-  }
-  else if (currentPage == 1)
-  {
-    softkeyStatus[0] = page1SoftkeyStatus1();
-    softkeyStatus[1] = page1SoftkeyStatus2();
-    softkeyStatus[2] = page1SoftkeyStatus3();
-    softkeyStatus[3] = page1SoftkeyStatus4();
-    softkeyStatus[4] = page1SoftkeyStatus5();
-    softkeyStatus[5] = page1SoftkeyStatus6();
-  }
-  else if (currentPage == 2)
-  {
-    softkeyStatus[0] = page2SoftkeyStatus1();
-    softkeyStatus[1] = page2SoftkeyStatus2();
-    softkeyStatus[2] = page2SoftkeyStatus3();
-    softkeyStatus[3] = page2SoftkeyStatus4();
-    softkeyStatus[4] = page2SoftkeyStatus5();
-    softkeyStatus[5] = page2SoftkeyStatus6();
+    // Update the soft-key status indicators
+    if (currentPage == 0)
+    {
+      softkeyStatus[0] = page0SoftkeyStatus1();
+      softkeyStatus[1] = page0SoftkeyStatus2();
+      softkeyStatus[2] = page0SoftkeyStatus3();
+      softkeyStatus[3] = page0SoftkeyStatus4();
+      softkeyStatus[4] = page0SoftkeyStatus5();
+      softkeyStatus[5] = page0SoftkeyStatus6();
+    }
+    else if (currentPage == 1)
+    {
+      softkeyStatus[0] = page1SoftkeyStatus1();
+      softkeyStatus[1] = page1SoftkeyStatus2();
+      softkeyStatus[2] = page1SoftkeyStatus3();
+      softkeyStatus[3] = page1SoftkeyStatus4();
+      softkeyStatus[4] = page1SoftkeyStatus5();
+      softkeyStatus[5] = page1SoftkeyStatus6();
+    }
+    else if (currentPage == 2)
+    {
+      softkeyStatus[0] = page2SoftkeyStatus1();
+      softkeyStatus[1] = page2SoftkeyStatus2();
+      softkeyStatus[2] = page2SoftkeyStatus3();
+      softkeyStatus[3] = page2SoftkeyStatus4();
+      softkeyStatus[4] = page2SoftkeyStatus5();
+      softkeyStatus[5] = page2SoftkeyStatus6();
+    }
   }
 }
 
