@@ -224,6 +224,8 @@ void setup(void)
 
   // Initial display drawing
   drawMainDisplay();
+  // Display the soft keys by calling changePage()
+  changePage();
 
 } // end setup
 
@@ -440,9 +442,6 @@ void drawMainDisplay()
   display.drawFastHLine(0, 30, 24, BLACK);
   display.drawFastHLine(60, 30, 24, BLACK);
   
-  // Display the soft keys by calling changePage()
-  changePage();
-
   // Update the ABC keys
   displayABCkeys();
 
@@ -462,11 +461,16 @@ void changePage()
     display.println("for GPS info");
   }
   else {
-    if (expansionPage != 1) {           // if we're not on the expansion page...
+    if (expansionPage != 1) {           // if we're not coming fromthe expansion page...
       currentPage = ++currentPage % 3;  // ...increment the current page (3 pages)
     }
+    else {                              // if we are coming from the expansion page we need to...
+      display.clearDisplay();           // ...clear the display and redraw the main display layout
+      drawMainDisplay();
+    }
+
     expansionPage = 0;                  // set expansionPage to false
-    display.clearDisplay();
+    
     // Label the soft keys
     // may update this when I implement multiple pages of soft-keys...
     if (currentPage == 0)
