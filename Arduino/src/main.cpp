@@ -79,6 +79,7 @@ bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
 
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
+void drawMainDisplay();       // draw main display
 void displayABCkeys();        // EEPROM read
 void displaySoftKeyStatus();  // possible EEPROM reads
 void getReadableMode();       // standard CAT command
@@ -219,24 +220,9 @@ void setup(void)
   TIMSK1 |= (1 << OCIE1A);              // enable timer compare interrupt
   sei();                                // allow interrupts
 
-  // Initial display setup
-  display.drawFastVLine(41, 0, 10, BLACK);
-  display.drawFastVLine(24, 10, 21, BLACK);
-  display.drawFastVLine(59, 10, 21, BLACK);
-  display.drawFastHLine(0, 9, display.width(), BLACK);
-  display.drawFastHLine(0, 20, 24, BLACK);
-  display.drawFastHLine(60, 20, 24, BLACK);
-  display.drawFastHLine(0, 30, 24, BLACK);
-  display.drawFastHLine(60, 30, 24, BLACK);
-  
-  // Display the soft keys by calling changePage()
-  changePage();
 
-  // Update the ABC keys
-  displayABCkeys();
-
-  // write to display
-  display.display();
+  // Initial display drawing
+  drawMainDisplay();
 
 } // end setup
 
@@ -437,6 +423,30 @@ ISR(TIMER1_COMPA_vect)
   {
     sw9status = LOW;  // holds switch status LOW until it has been used in the main loop
   }
+}
+
+
+// Draw main display
+void drawMainDisplay()
+{
+  // Initial display setup
+  display.drawFastVLine(41, 0, 10, BLACK);
+  display.drawFastVLine(24, 10, 21, BLACK);
+  display.drawFastVLine(59, 10, 21, BLACK);
+  display.drawFastHLine(0, 9, display.width(), BLACK);
+  display.drawFastHLine(0, 20, 24, BLACK);
+  display.drawFastHLine(60, 20, 24, BLACK);
+  display.drawFastHLine(0, 30, 24, BLACK);
+  display.drawFastHLine(60, 30, 24, BLACK);
+  
+  // Display the soft keys by calling changePage()
+  changePage();
+
+  // Update the ABC keys
+  displayABCkeys();
+
+  // write to display
+  display.display();
 }
 
 
