@@ -274,7 +274,7 @@ void loop()  // MAIN LOOP
   // If user has pushed one of the soft-keys (1-6)
     if (currentPage == 0)
     {
-      if (button == 0) {}
+      if (button == 0) {goto endOfSoftKeyActions;}
       else if (button == 1) { page0SoftkeyFunction1(); softkeyStatus[0] = page0SoftkeyStatus1();}
       else if (button == 2) { page0SoftkeyFunction2(); softkeyStatus[1] = page0SoftkeyStatus2();}
       else if (button == 3) { page0SoftkeyFunction3(); softkeyStatus[2] = page0SoftkeyStatus3();}
@@ -286,7 +286,7 @@ void loop()  // MAIN LOOP
     }
     else if (currentPage == 1)
     {
-      if (button == 0) {}
+      if (button == 0) {goto endOfSoftKeyActions;}
       else if (button == 1) { page1SoftkeyFunction1(); softkeyStatus[0] = page1SoftkeyStatus1();}
       else if (button == 2) { page1SoftkeyFunction2(); softkeyStatus[1] = page1SoftkeyStatus2();}
       else if (button == 3) { page1SoftkeyFunction3(); softkeyStatus[2] = page1SoftkeyStatus3();}
@@ -298,7 +298,7 @@ void loop()  // MAIN LOOP
     }
     else if (currentPage == 2)
     {
-      if (button == 0) {}
+      if (button == 0) {goto endOfSoftKeyActions;}
       else if (button == 1) { page2SoftkeyFunction1(); softkeyStatus[0] = page2SoftkeyStatus1();}
       else if (button == 2) { page2SoftkeyFunction2(); softkeyStatus[1] = page2SoftkeyStatus2();}
       else if (button == 3) { page2SoftkeyFunction3(); softkeyStatus[2] = page2SoftkeyStatus3();}
@@ -308,6 +308,7 @@ void loop()  // MAIN LOOP
       button = 0;  // reset button variable to zero once we've used it
       displaySoftKeyStatus();
     }
+    endOfSoftKeyActions:
 
   if (sw7status == LOW)   // PAGE button
   {
@@ -456,8 +457,11 @@ void changePage()
     expansionPage = 1;
     display.clearDisplay();
     display.setCursor(0, 0);
-    display.println("Placeholder");
-    display.println("for GPS info");
+    display.print("DD/MM/YY");
+    display.setCursor(5, 22);
+    display.print("UTC:");
+    display.setCursor(27, 22);
+    display.print("00:00");
   }
   else {
     if (expansionPage != 1) {           // if we're not coming from the expansion page...
@@ -466,6 +470,7 @@ void changePage()
     else {                              // if we are coming from the expansion page we need to...
       display.clearDisplay();           // ...clear the display
       display.display();
+      drawMainDisplay();
       
     }
 
@@ -568,6 +573,9 @@ void changePage()
       softkeyStatus[4] = page2SoftkeyStatus5();
       softkeyStatus[5] = page2SoftkeyStatus6();
     }
+
+    // Display the soft-key indicators
+    displaySoftKeyStatus();
   }
 }
 
