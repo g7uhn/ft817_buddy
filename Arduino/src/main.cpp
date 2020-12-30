@@ -368,7 +368,7 @@ void loop()  // MAIN LOOP
     display.print(buffer);
 
     // Calculate time value (either uptime or UTC if GPS expansion has updated the values)
-    if ( millis() - tickOver > 60000) {
+    if ( millis() - tickOver > 59999) {
       if (mm == 59) {
         hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
       }
