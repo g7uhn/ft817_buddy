@@ -135,24 +135,24 @@ String   page1SoftkeyLabel1 = "RF/SQL";           // 6 characters
 void  page1SoftkeyFunction1() {radio.toggleRfSql();}        // EEPROM write
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
-String   page1SoftkeyLabel2 = "A/B";              // 3 characters
-void  page1SoftkeyFunction2() {radio.toggleVFO();}
+String   page1SoftkeyLabel2 = "hh-";              // 3 characters
+void  page1SoftkeyFunction2() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; delay(300);}
 boolean page1SoftkeyStatus2() {}
 // SOFT-KEY 3 
-String   page1SoftkeyLabel3 = "   ";              // 3 characters
-void  page1SoftkeyFunction3() {}
+String   page1SoftkeyLabel3 = "mm-";              // 3 characters
+void  page1SoftkeyFunction3() {if(mm==0) {mm=59;} else{mm = (mm - 1) % 60;}; delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "   k12";           // 6 characters
-void  page1SoftkeyFunction4() {radio.setKeyerSpeed(12);}    // EEPROM write
+String   page1SoftkeyLabel4 = "      ";           // 6 characters
+void  page1SoftkeyFunction4() {}    // EEPROM write
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
-String   page1SoftkeyLabel5 = "k15";              // 3 characters
-void  page1SoftkeyFunction5() {radio.setKeyerSpeed(15);}    // EEPROM write
+String   page1SoftkeyLabel5 = "hh+";              // 3 characters
+void  page1SoftkeyFunction5() {hh = (hh + 1) % 24; delay(300);}
 boolean page1SoftkeyStatus5() {}
 // SOFT-KEY 6
-String   page1SoftkeyLabel6 = "k18";              // 3 characters
-void  page1SoftkeyFunction6() {radio.setKeyerSpeed(18);}    // EEPROM write
+String   page1SoftkeyLabel6 = "mm+";              // 3 characters
+void  page1SoftkeyFunction6() {mm = (mm + 1) % 60; delay(300);}
 boolean page1SoftkeyStatus6() {}
 
 
