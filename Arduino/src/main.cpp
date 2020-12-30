@@ -74,9 +74,10 @@ int button = 0;         // ...button number
 byte sMeter;
 byte MSB;
 byte LSB;
-// New variables for soft-key pages and soft-key status
 int currentPage = 2;    // initialise at the last page
 bool softkeyStatus[6] = {0, 0, 0, 0, 0, 0};
+int hh = 0;             // clock hour
+int mm = 0;             // clock minute
 
 // Forward declaration of functions (required for PlatformIO)
 // If you create your own user functions below, you'll need to declare them here for PlatformIO to compile
@@ -367,6 +368,12 @@ void loop()  // MAIN LOOP
   
 // SLOW REFRESH STUFF
 
+// Print UTC time value
+// Format and print UTC time
+char buffer[6]="";    // This is the buffer for the string the sprintf outputs to
+sprintf(buffer, "%02d:%02d", hh, mm);
+display.setCursor(27, 11);
+display.print(buffer);
 
 // Timed backlight countdown operation
 if(timedBacklight == true)
@@ -464,15 +471,16 @@ void changePage()
     display.print("DD/MM/YY");
     display.setCursor(0, 11);
     display.print("UTC");
-    display.setCursor(29, 11);
-    display.print("00:00");          // Print time value here (global)
-    display.setCursor(0, 22);
+
+    // Time value printed in main loop
+
+    display.setCursor(0, 21);
     display.print("Lat");
-    display.setCursor(29, 22);
+    display.setCursor(27, 21);
     display.print("00.00:00");       // Print Latitude value here (global)
     display.setCursor(0, 31);
     display.print("Long");
-    display.setCursor(29, 31);
+    display.setCursor(27, 31);
     display.print("000.00:00");      // Print Longitude value here (global)
     display.setCursor(0, 41);
     display.print("Locator");
