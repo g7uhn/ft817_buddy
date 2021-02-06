@@ -27,6 +27,9 @@
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
 #define EEPROM_WRITES
 
+// uncomment the line below if you have fitted the Sparkfun DS1307 RTC module
+#define RTC_FITTED
+
 // Include libraries
 #include <Arduino.h>    // required for PlatformIO IDE (not required if you're using Arduino IDE)
 #include <SPI.h>
@@ -35,6 +38,8 @@
 #include <Adafruit_I2CDevice.h>
 #include <SoftwareSerial.h>
 #include <ft817.h>
+#include <SparkFunDS1307RTC.h>
+#include <Wire.h>
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
@@ -131,8 +136,8 @@ boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
 
 // Page1 items
 // SOFT-KEY 1 
-String   page1SoftkeyLabel1 = "k13   ";           // 6 characters
-void  page1SoftkeyFunction1() {radio.setKeyerSpeed(13);}        // EEPROM write
+String   page1SoftkeyLabel1 = "getRTC";           // 6 characters
+void  page1SoftkeyFunction1() {rtc.update(); ss = rtc.second(); mm = rtc.minute(); hh = rtc.hour();}  // get update from RTC and update Arduino's hh/mm/ss
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page1SoftkeyLabel2 = "hh+";              // 3 characters
@@ -143,8 +148,8 @@ String   page1SoftkeyLabel3 = "hh-";              // 3 characters
 void  page1SoftkeyFunction3() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "   k17";           // 6 characters
-void  page1SoftkeyFunction4() {radio.setKeyerSpeed(17);}    // EEPROM write
+String   page1SoftkeyLabel4 = "setRTC";           // 6 characters
+void  page1SoftkeyFunction4() {rtc.setTime(0, mm, hh, 1, 1, 1, 21);}  // set RTC to hh:mm on the 1/1/21 (we're not interested in dates here, only time)
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page1SoftkeyLabel5 = "mm+";              // 3 characters
@@ -190,6 +195,9 @@ void setup(void)
   // Start serial
   radio.begin(38400);         // start the serial port for the CAT library
 
+  // Initialise RTC library
+  rtc.begin();
+  
   // Start expansion software serial
   //expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
 
@@ -230,6 +238,14 @@ void setup(void)
   // Initial draw of the main display by calling changePage()
   drawMainDisplay();
   changePage();
+
+  #ifdef RTC_FITTED
+  // Get RTC time (non-blocking and clock will start at 00:00 if no RTC available????)
+  rtc.update();
+  ss = rtc.second();
+  mm = rtc.minute();
+  hh = rtc.hour();
+  #endif
 
 } // end setup
 
