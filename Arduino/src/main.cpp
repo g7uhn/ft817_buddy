@@ -46,13 +46,13 @@ SoftwareSerial expansion(12,11);
 // Define PCB pins
 #define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
 #define buttonPin A0       // SW1-SW6 arrive as different levels on analog input A0
-#define sw7pin 2           // SW7 input is D2
+#define sw7pin 11           // SW7 input is D11
 #define sw8pin 10          // SW8 input is D10
 #define sw9pin 9           // SW9 input is D9
 #define keyerSw1 15          // A1 (pin 15) is Keyer SW1
-#define keyerSw2 16          // A1 (pin 16) is Keyer SW2
-#define keyerSw3 17          // A1 (pin 17) is Keyer SW3
-#define keyerSw4 18          // A1 (pin 18) is Keyer SW4
+#define keyerSw2 16          // A2 (pin 16) is Keyer SW2
+#define keyerSw3 17          // A3 (pin 17) is Keyer SW3
+#define keyerSw4 13          // D13 is Keyer SW4
 
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
