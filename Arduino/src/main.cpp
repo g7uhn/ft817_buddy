@@ -25,7 +25,7 @@
 */
 
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
-//#define EEPROM_WRITES
+#define EEPROM_WRITES
 
 // Include libraries
 #include <Arduino.h>    // required for PlatformIO IDE (not required if you're using Arduino IDE)
