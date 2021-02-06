@@ -1,0 +1,61 @@
+#######################################
+# Syntax Coloring Map 
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+rtc	KEYWORD1
+SparkFunDS1307RTC	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+setTime	KEYWORD2
+autoTime	KEYWORD2
+setSecond	KEYWORD2
+setMinute	KEYWORD2
+setHour	KEYWORD2
+setDay	KEYWORD2
+setDate	KEYWORD2
+setMonth	KEYWORD2
+setYear	KEYWORD2
+update	KEYWORD2
+second	KEYWORD2
+minute	KEYWORD2
+hour	KEYWORD2
+day	KEYWORD2
+dayChar	KEYWORD2
+dayStr	KEYWORD2
+date	KEYWORD2
+month	KEYWORD2
+year	KEYWORD2
+getSecond	KEYWORD2
+getMinute	KEYWORD2
+getHour	KEYWORD2
+getDay	KEYWORD2
+getDate	KEYWORD2
+getMonth	KEYWORD2
+getYear	KEYWORD2
+is12Hour	KEYWORD2
+pm	KEYWORD2
+writeSQW	KEYWORD2
+enable	KEYWORD2
+disable	KEYWORD2
+set12Hour	KEYWORD2
+set24Hour	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+AM	LITERAL1
+PM	LITERAL1
+SQW_SQUARE_1	LITERAL1
+SQW_SQUARE_4K	LITERAL1
+SQW_SQUARE_8K	LITERAL1
+SQW_SQUARE_32K	LITERAL1
+SQW_LOW	LITERAL1
+SQW_HIGH	LITERAL1
