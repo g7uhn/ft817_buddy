@@ -484,11 +484,11 @@ ISR(TIMER1_COMPA_vect)
 // Increment the clock driven by RTC 1Hz square wave interrupt
 void incrementSeconds()
 {
-  if (mm == 59) {
-    hh = (hh + 1) % 24; // if minute = 59, increment the hour, modulo 24
-  }
   if (ss == 59) {
-  mm = (mm + 1) % 60;   // if second = 59, increment the minute, modulo 60
+    if (mm == 59) {
+    hh = (hh + 1) % 24;   // if second = 59 AND minute = 59, increment the hour, modulo 24
+    }
+    mm = (mm + 1) % 60;   // if second = 59, increment the minute, modulo 60
   }
   ss = (ss + 1) % 60;   // increment the second, modulo 60
 }
