@@ -27,7 +27,7 @@
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
 #define EEPROM_WRITES
 
-// uncomment the line below if you have fitted the Sparkfun DS1307 RTC module
+// uncomment the line below if you have fitted the Sparkfun DS1307 RTC module to the expansion header
 #define RTC_FITTED
 
 // Include libraries
@@ -49,15 +49,16 @@ FT817 radio;              // define “radio” so that we may pass CAT and EEPR
 SoftwareSerial expansion(12,11);
 
 // Define PCB pins
-#define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
-#define buttonPin A0       // SW1-SW6 arrive as different levels on analog input A0
-#define sw7pin 11           // SW7 input is D11
-#define sw8pin 10          // SW8 input is D10
-#define sw9pin 9           // SW9 input is D9
+#define backlightPin 8       // backlight output pin (not the "LIGHT" input button!)
+#define buttonPin A0         // SW1-SW6 arrive as different levels on analog input A0
+#define sw7pin 11            // SW7 input is D11
+#define sw8pin 10            // SW8 input is D10
+#define sw9pin 9             // SW9 input is D9
 #define keyerSw1 15          // A1 (pin 15) is Keyer SW1
 #define keyerSw2 16          // A2 (pin 16) is Keyer SW2
 #define keyerSw3 17          // A3 (pin 17) is Keyer SW3
 #define keyerSw4 13          // D13 is Keyer SW4
+#define SQW_INPUT_PIN 2      // Input pin to read RTC square wave
 
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
@@ -101,6 +102,7 @@ void pressKeyerSw2();         // no FT-817 interaction
 void pressKeyerSw3();         // no FT-817 interaction
 void pressKeyerSw4();         // no FT-817 interaction
 void longPressKeyerSw1();     // no FT-817 interaction
+void incrementSeconds();      // no FT-817 interaction
 
 
 /////////////   SETUP YOUR SOFT-KEY PAGES HERE!   ////////////////////////
@@ -133,6 +135,7 @@ boolean page0SoftkeyStatus5() {return radio.getBreakIn();}  // EEPROM read
 String   page0SoftkeyLabel6 = "NAR";              // 3 characters
 void  page0SoftkeyFunction6() {radio.toggleNar();}          // EEPROM write
 boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
+
 
 // Page1 items
 // SOFT-KEY 1 
@@ -188,6 +191,7 @@ void  page2SoftkeyFunction6() {pressKeyerSw4();}
 boolean page2SoftkeyStatus6() {}
 
 ///////////////  END OF SOFT-KEY PAGE SETUP   ////////////////////
+//////////////////////////////////////////////////////////////////
 
 
 void setup(void) 
@@ -195,8 +199,12 @@ void setup(void)
   // Start serial
   radio.begin(38400);         // start the serial port for the CAT library
 
+  #ifdef RTC_FITTED
   // Initialise RTC library
   rtc.begin();
+  rtc.writeSQW(SQW_SQUARE_1);   // Sets SQW output to 1Hz
+  attachInterrupt(digitalPinToInterrupt(SQW_INPUT_PIN), incrementSeconds, RISING);
+  #endif
   
   // Start expansion software serial
   //expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
@@ -210,6 +218,7 @@ void setup(void)
   pinMode(keyerSw2, OUTPUT);
   pinMode(keyerSw3, OUTPUT);
   pinMode(keyerSw4, OUTPUT);
+  pinMode(SQW_INPUT_PIN, INPUT_PULLUP);
 
   digitalWrite(backlightPin, LOW);
   digitalWrite(keyerSw1, LOW);
@@ -385,15 +394,17 @@ void loop()  // MAIN LOOP
     display.setCursor(27, 12);
     display.print(buffer);
 
-    // Calculate time value (either uptime or UTC if GPS expansion has updated the values)
+
+    #ifndef RTC_FITTED   // if RTC not fitted, use this clunky way out counting up the time in the main loop (RTC method uses hardware interrupt)
+    // Calculate time value (at boot this is uptime or user can set hh:mm values, install RTC module to avoid having to set this every boot)
     if ( millis() - tickOver > 59999) {
       if (mm == 59) {
         hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
       }
       mm = (mm + 1) % 60;  // Increment mm modulo 60
-      // What do we do about incrementing the date????????  :-/
       tickOver = millis();
     }
+    #endif
 
     delay(200);
 
@@ -467,6 +478,19 @@ ISR(TIMER1_COMPA_vect)
   {
     sw9status = LOW;  // holds switch status LOW until it has been used in the main loop
   }
+}
+
+
+// Increment the clock driven by RTC 1Hz square wave interrupt
+void incrementSeconds()
+{
+  if (mm == 59) {
+    hh = (hh + 1) % 24; // if minute = 59, increment the hour, modulo 24
+  }
+  if (ss == 59) {
+  mm = (mm + 1) % 60;   // if second = 59, increment the minute, modulo 60
+  }
+  ss = (ss + 1) % 60;   // increment the second, modulo 60
 }
 
 
