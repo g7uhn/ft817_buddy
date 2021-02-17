@@ -106,9 +106,9 @@ void incrementSeconds();      // no FT-817 interaction
 
 
 /////////////   SETUP YOUR SOFT-KEY PAGES HERE!   ////////////////////////
-// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
+// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function
 // or, if the desired function is a combination of actions, define a function in the USER FUNCTIONS section below
-// to be called by the sketch.  Don't forget to forward declare your user function above.
+// to be called by the sketch.  If you make a new function, don't forget to forward declare your user function above.
 
 // Page0 items
 // SOFT-KEY 1 
