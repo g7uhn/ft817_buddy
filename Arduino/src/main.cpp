@@ -25,7 +25,7 @@
 */
 
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
-#define EEPROM_WRITES
+//#define EEPROM_WRITES
 
 // uncomment the line below if you have fitted the Sparkfun DS1307 RTC module to the expansion header
 #define RTC_FITTED
@@ -228,7 +228,7 @@ void setup(void)
 
   // Initialize Display
   display.begin();
-  display.setContrast(57);    // you can change the contrast around to adapt the display for the best viewing!
+  display.setContrast(62);    // you can change the contrast around to adapt the display for the best viewing! 57 is default and good for Sparkfun
   display.clearDisplay();     // Clear the buffer.
 
   // Set up the timer interrupt to watch for button status at 50 Hz (needed to catch a quick button press)
