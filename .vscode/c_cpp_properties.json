@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Users/Andre/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/Andre/.platformio/packages/toolchain-atmelavr/avr/include",
+                "C:/Users/Andre/.platformio/packages/framework-arduino-avr/libraries/SPI/src"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}
