@@ -442,25 +442,27 @@ ISR(TIMER1_COMPA_vect)
 { //change the 0 to 1 for timer1 and 2 for timer2
   // Get button status (levels determined by resistor network)
   buttonStatus = analogRead(buttonPin);
-  if (buttonStatus < 80) {
-    button = 1;
+  switch (buttonStatus) {
+    case 0 ... 79:
+      button = 1;
+      break;
+    case 80 ... 239:
+      button = 2;
+      break;
+    case 240 ... 399:
+      button = 3;
+      break;
+    case 400 ... 569:
+      button = 4;
+      break;
+    case 570 ... 749:
+      button = 5;
+      break;
+    case 750 ... 900:
+      button = 6;
+      break;
   }
-  else if (buttonStatus < 240) {
-    button = 2;
-  }
-  else if (buttonStatus < 400) {
-    button = 3;
-  }
-  else if (buttonStatus < 570) {
-    button = 4;
-  }
-  else if (buttonStatus < 750) {
-    button = 5;
-  }
-  else if (buttonStatus < 900) {
-    button = 6;
-  }
-
+  
   bool sw7 = digitalRead(sw7pin);
   if (!sw7)
   {
