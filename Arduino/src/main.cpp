@@ -257,11 +257,6 @@ void setup(void)
   hh = rtc.hour();
   #endif
 
-} // end setup
-
-
-void loop()  // MAIN LOOP
-{
   #ifndef EEPROM_WRITES   // if user has not accepted risk/responsibility of EEPROM writes, display a reminder  :-)
     display.setCursor(0, 0);
     display.setTextSize(1);
@@ -273,9 +268,13 @@ void loop()  // MAIN LOOP
     display.println(" See notes in ");
     display.println(" the code     ");
     display.display();
-    delay(2000);
   #endif
-  
+
+} // end setup
+
+
+void loop()  // MAIN LOOP
+{
   #ifdef EEPROM_WRITES    // if user has accepted the risk/responsibility of EEPROM writes, go ahead and run the main code block...
 
   // Using two loops to avoid polling the radio too quickly with things we don't need a fast refresh on:
