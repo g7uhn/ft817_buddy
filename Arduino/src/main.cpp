@@ -27,6 +27,10 @@
 // uncomment the line below if you want to use this sketch that writes to the EEPROM and accept the responsibility stated above!  :-)
 //#define EEPROM_WRITES
 
+// uncomment the line below if you have fitted the Sparkfun DS1307 RTC module to the expansion header
+// if no RTC module is fitted, this line should be commented out
+#define RTC_FITTED
+
 // Include libraries
 #include <Arduino.h>    // required for PlatformIO IDE (not required if you're using Arduino IDE)
 #include <SPI.h>
@@ -35,6 +39,8 @@
 #include <Adafruit_I2CDevice.h>
 #include <SoftwareSerial.h>
 #include <ft817.h>
+#include <SparkFunDS1307RTC.h>
+#include <Wire.h>
 
 // Declarations
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);    // pins for (CLK,DIN,D/C,CE,RST)
@@ -44,15 +50,16 @@ FT817 radio;              // define “radio” so that we may pass CAT and EEPR
 SoftwareSerial expansion(12,11);
 
 // Define PCB pins
-#define backlightPin 8     // backlight output pin (not the "LIGHT" input button!)
-#define buttonPin A0       // SW1-SW6 arrive as different levels on analog input A0
-#define sw7pin 2           // SW7 input is D2
-#define sw8pin 10          // SW8 input is D10
-#define sw9pin 9           // SW9 input is D9
+#define backlightPin 8       // backlight output pin (not the "LIGHT" input button!)
+#define buttonPin A0         // SW1-SW6 arrive as different levels on analog input A0
+#define sw7pin 11            // SW7 input is D11
+#define sw8pin 10            // SW8 input is D10
+#define sw9pin 9             // SW9 input is D9
 #define keyerSw1 15          // A1 (pin 15) is Keyer SW1
-#define keyerSw2 16          // A1 (pin 16) is Keyer SW2
-#define keyerSw3 17          // A1 (pin 17) is Keyer SW3
-#define keyerSw4 18          // A1 (pin 18) is Keyer SW4
+#define keyerSw2 16          // A2 (pin 16) is Keyer SW2
+#define keyerSw3 17          // A3 (pin 17) is Keyer SW3
+#define keyerSw4 13          // D13 is Keyer SW4
+#define SQW_INPUT_PIN 2      // Input pin to read RTC square wave
 
 
 // Global variables - g7uhn TO DO: Needs a big tidy up here
@@ -96,12 +103,13 @@ void pressKeyerSw2();         // no FT-817 interaction
 void pressKeyerSw3();         // no FT-817 interaction
 void pressKeyerSw4();         // no FT-817 interaction
 void longPressKeyerSw1();     // no FT-817 interaction
+void incrementSeconds();      // no FT-817 interaction
 
 
 /////////////   SETUP YOUR SOFT-KEY PAGES HERE!   ////////////////////////
-// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function above
+// Single functions from the ft817 library can be called straight from the pageXSoftKeyFunctionY function
 // or, if the desired function is a combination of actions, define a function in the USER FUNCTIONS section below
-// to be called by the sketch.  Don't forget to forward declare your user function above.
+// to be called by the sketch.  If you make a new function, don't forget to forward declare your user function above.
 
 // Page0 items
 // SOFT-KEY 1 
@@ -129,10 +137,11 @@ String   page0SoftkeyLabel6 = "NAR";              // 3 characters
 void  page0SoftkeyFunction6() {radio.toggleNar();}          // EEPROM write
 boolean page0SoftkeyStatus6() {return radio.getNar();}      // EEPROM read
 
+
 // Page1 items
 // SOFT-KEY 1 
-String   page1SoftkeyLabel1 = "k13   ";           // 6 characters
-void  page1SoftkeyFunction1() {radio.setKeyerSpeed(13);}        // EEPROM write
+String   page1SoftkeyLabel1 = "getRTC";           // 6 characters
+void  page1SoftkeyFunction1() {rtc.update(); ss = rtc.second(); mm = rtc.minute(); hh = rtc.hour();}  // get update from RTC and update Arduino's hh/mm/ss
 boolean page1SoftkeyStatus1() {}
 // SOFT-KEY 2 
 String   page1SoftkeyLabel2 = "hh+";              // 3 characters
@@ -143,8 +152,8 @@ String   page1SoftkeyLabel3 = "hh-";              // 3 characters
 void  page1SoftkeyFunction3() {if(hh==0) {hh=23;} else{hh = (hh - 1) % 24;}; tickOver = millis(); delay(300);}
 boolean page1SoftkeyStatus3() {}
 // SOFT-KEY 4 
-String   page1SoftkeyLabel4 = "   k17";           // 6 characters
-void  page1SoftkeyFunction4() {radio.setKeyerSpeed(17);}    // EEPROM write
+String   page1SoftkeyLabel4 = "setRTC";           // 6 characters
+void  page1SoftkeyFunction4() {rtc.setTime(0, mm, hh, 1, 1, 1, 21);}  // set RTC to hh:mm on the 1/1/21 (we're not interested in dates here, only time)
 boolean page1SoftkeyStatus4() {}
 // SOFT-KEY 5 
 String   page1SoftkeyLabel5 = "mm+";              // 3 characters
@@ -183,6 +192,7 @@ void  page2SoftkeyFunction6() {pressKeyerSw4();}
 boolean page2SoftkeyStatus6() {}
 
 ///////////////  END OF SOFT-KEY PAGE SETUP   ////////////////////
+//////////////////////////////////////////////////////////////////
 
 
 void setup(void) 
@@ -190,6 +200,13 @@ void setup(void)
   // Start serial
   radio.begin(38400);         // start the serial port for the CAT library
 
+  #ifdef RTC_FITTED
+  // Initialise RTC library
+  rtc.begin();
+  rtc.writeSQW(SQW_SQUARE_1);   // Sets SQW output to 1Hz
+  attachInterrupt(digitalPinToInterrupt(SQW_INPUT_PIN), incrementSeconds, RISING);
+  #endif
+  
   // Start expansion software serial
   //expansion.begin(115200);    // start the expansion serial port at 115200 baud for GPS module
 
@@ -202,6 +219,7 @@ void setup(void)
   pinMode(keyerSw2, OUTPUT);
   pinMode(keyerSw3, OUTPUT);
   pinMode(keyerSw4, OUTPUT);
+  pinMode(SQW_INPUT_PIN, INPUT_PULLUP);
 
   digitalWrite(backlightPin, LOW);
   digitalWrite(keyerSw1, LOW);
@@ -211,7 +229,7 @@ void setup(void)
 
   // Initialize Display
   display.begin();
-  display.setContrast(57);    // you can change the contrast around to adapt the display for the best viewing!
+  display.setContrast(62);    // you can change the contrast around to adapt the display for the best viewing! 57 is default and good for Sparkfun
   display.clearDisplay();     // Clear the buffer.
 
   // Set up the timer interrupt to watch for button status at 50 Hz (needed to catch a quick button press)
@@ -230,6 +248,14 @@ void setup(void)
   // Initial draw of the main display by calling changePage()
   drawMainDisplay();
   changePage();
+
+  #ifdef RTC_FITTED
+  // Get RTC time (non-blocking and clock will start at 00:00 if no RTC available????)
+  rtc.update();
+  ss = rtc.second();
+  mm = rtc.minute();
+  hh = rtc.hour();
+  #endif
 
 } // end setup
 
@@ -369,15 +395,17 @@ void loop()  // MAIN LOOP
     display.setCursor(27, 12);
     display.print(buffer);
 
-    // Calculate time value (either uptime or UTC if GPS expansion has updated the values)
+
+    #ifndef RTC_FITTED   // if RTC not fitted, use this clunky way out counting up the time in the main loop (RTC method uses hardware interrupt)
+    // Calculate time value (at boot this is uptime or user can set hh:mm values, install RTC module to avoid having to set this every boot)
     if ( millis() - tickOver > 59999) {
       if (mm == 59) {
         hh = (hh + 1) % 24; // If mm == 59, increment hh modulo 24
       }
       mm = (mm + 1) % 60;  // Increment mm modulo 60
-      // What do we do about incrementing the date????????  :-/
       tickOver = millis();
     }
+    #endif
 
     delay(200);
 
@@ -451,6 +479,19 @@ ISR(TIMER1_COMPA_vect)
   {
     sw9status = LOW;  // holds switch status LOW until it has been used in the main loop
   }
+}
+
+
+// Increment the clock driven by RTC 1Hz square wave interrupt
+void incrementSeconds()
+{
+  if (ss == 59) {
+    if (mm == 59) {
+    hh = (hh + 1) % 24;   // if second = 59 AND minute = 59, increment the hour, modulo 24
+    }
+    mm = (mm + 1) % 60;   // if second = 59, increment the minute, modulo 60
+  }
+  ss = (ss + 1) % 60;   // increment the second, modulo 60
 }
 
 
