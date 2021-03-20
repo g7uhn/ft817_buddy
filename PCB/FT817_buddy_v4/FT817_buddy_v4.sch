@@ -59,29 +59,29 @@ F 3 "~" H 950 1200 50  0001 C CNN
 	1    950  1200
 	-1   0    0    1   
 $EndComp
-Text GLabel 1050 4250 3    50   Input ~ 0
+Text GLabel 1050 4250 3    50   UnSpc ~ 0
 GND1
 Text GLabel 1150 4250 3    50   Input ~ 0
 VDD1
-Text GLabel 1250 4250 3    50   Input ~ 0
+Text GLabel 1250 4250 3    50   UnSpc ~ 0
 GND2
-Text GLabel 1350 4250 3    50   Input ~ 0
+Text GLabel 1350 4250 3    50   Output ~ 0
 VDD2
-Text GLabel 1250 2850 0    50   Input ~ 0
+Text GLabel 1250 2850 0    50   UnSpc ~ 0
 GND1
-Text GLabel 2250 2850 2    50   Input ~ 0
+Text GLabel 2250 2850 2    50   UnSpc ~ 0
 GND2
 Text GLabel 1050 2450 0    50   Input ~ 0
 VDD1
 Text GLabel 2450 2450 2    50   Input ~ 0
 VDD2
-Text GLabel 5950 1000 2    50   Input ~ 0
+Text GLabel 5950 1000 2    50   Output ~ 0
 VDD1
-Text GLabel 4850 1400 3    50   Input ~ 0
+Text GLabel 4850 1500 3    50   UnSpc ~ 0
 GND1
-Text GLabel 1150 1100 2    50   Input ~ 0
+Text GLabel 1150 1100 2    50   UnSpc ~ 0
 GND1
-Text GLabel 1150 1000 2    50   Input ~ 0
+Text GLabel 1150 1000 2    50   Output ~ 0
 FT817_Vout
 Text GLabel 2900 1000 0    50   Input ~ 0
 FT817_Vout
@@ -89,27 +89,27 @@ Wire Wire Line
 	5150 1000 5300 1000
 Text GLabel 1150 1400 2    50   Input ~ 0
 FT817_RXD
-Text GLabel 1150 1300 2    50   Input ~ 0
+Text GLabel 1150 1300 2    50   Output ~ 0
 FT817_TXD
-Text GLabel 1150 1200 2    50   Input ~ 0
+Text GLabel 1150 1200 2    50   UnSpc ~ 0
 SHIELD
 Text GLabel 1250 2750 0    50   Input ~ 0
 FT817_TXD
-Text GLabel 1250 2550 0    50   Input ~ 0
+Text GLabel 1250 2550 0    50   Output ~ 0
 FT817_RXD
 Text GLabel 3850 4100 1    50   Input ~ 0
 VDD2
-Text GLabel 3750 6100 3    50   Input ~ 0
+Text GLabel 3750 6100 3    50   UnSpc ~ 0
 GND2
-Text GLabel 2250 2750 2    50   Input ~ 0
+Text GLabel 2250 2750 2    50   Output ~ 0
 ARD_RXD
 Text GLabel 2250 2550 2    50   Input ~ 0
 ARD_TXD
-Text GLabel 2250 4400 0    50   Input ~ 0
+Text GLabel 2250 4400 0    50   Output ~ 0
 ARD_TXD
-Text GLabel 3150 5300 0    50   Input ~ 0
+Text GLabel 3150 5300 0    50   Output ~ 0
 BACKLIGHT
-Text GLabel 9250 3000 0    50   Input ~ 0
+Text GLabel 9250 3000 0    50   UnSpc ~ 0
 GND2
 Text GLabel 8750 4150 0    50   Input ~ 0
 3V3
@@ -123,31 +123,27 @@ Text GLabel 8300 3750 0    50   Input ~ 0
 CE
 Text GLabel 8350 3350 0    50   Input ~ 0
 RST
-Text GLabel 3150 5200 0    50   Input ~ 0
+Text GLabel 3150 5200 0    50   Output ~ 0
 CLK
-Text GLabel 3150 5100 0    50   Input ~ 0
+Text GLabel 3150 5100 0    50   Output ~ 0
 DIN
-Text GLabel 3150 5000 0    50   Input ~ 0
+Text GLabel 3150 5000 0    50   Output ~ 0
 DC
-Text GLabel 3150 4900 0    50   Input ~ 0
+Text GLabel 3150 4900 0    50   Output ~ 0
 CE
-Text GLabel 3150 4800 0    50   Input ~ 0
+Text GLabel 3150 4800 0    50   Output ~ 0
 RST
-Text GLabel 3150 5500 0    50   Input ~ 0
-SW8
-Text GLabel 3150 5400 0    50   Input ~ 0
-SW9
-Text GLabel 1300 7050 0    50   Input ~ 0
+Text GLabel 1300 7050 0    50   UnSpc ~ 0
 GND2
-Text GLabel 2350 7050 0    50   Input ~ 0
+Text GLabel 2350 7050 0    50   UnSpc ~ 0
 GND2
-Text GLabel 3400 7050 0    50   Input ~ 0
+Text GLabel 3400 7050 0    50   UnSpc ~ 0
 GND2
-Text GLabel 1700 7050 2    50   Input ~ 0
+Text GLabel 1700 7050 2    50   Output ~ 0
 SW7
-Text GLabel 2750 7050 2    50   Input ~ 0
+Text GLabel 2750 7050 2    50   Output ~ 0
 SW8
-Text GLabel 3800 7050 2    50   Input ~ 0
+Text GLabel 3800 7050 2    50   Output ~ 0
 SW9
 $Comp
 L Device:R R2
@@ -337,9 +333,9 @@ F 4 "C49678" H 1150 2250 50  0001 C CNN "JLCPCB"
 	1    1150 2250
 	1    0    0    -1  
 $EndComp
-Text GLabel 1150 2050 1    50   Input ~ 0
+Text GLabel 1150 2050 1    50   UnSpc ~ 0
 GND1
-Text GLabel 2350 2050 1    50   Input ~ 0
+Text GLabel 2350 2050 1    50   UnSpc ~ 0
 GND2
 Wire Wire Line
 	1050 2450 1150 2450
@@ -718,7 +714,7 @@ Wire Wire Line
 	9200 3950 9800 3950
 Wire Wire Line
 	9450 4050 9800 4050
-Text GLabel 3750 4100 1    50   Input ~ 0
+Text GLabel 3750 4100 1    50   Output ~ 0
 3V3
 Wire Wire Line
 	3800 1000 4350 1000
@@ -744,8 +740,6 @@ F 3 "~" H 2600 4250 50  0001 C CNN
 	1    2600 4250
 	-1   0    0    1   
 $EndComp
-Text GLabel 3150 5600 0    50   Input ~ 0
-SW7
 Text GLabel 2250 4250 0    50   Input ~ 0
 ARD_RXD
 Wire Wire Line
@@ -793,15 +787,15 @@ F 3 "~" H 3850 3150 50  0001 C CNN
 	1    3850 3150
 	1    0    0    -1  
 $EndComp
-Text GLabel 3350 3150 0    50   Input ~ 0
+Text GLabel 3350 3150 0    50   Output ~ 0
 KEY
-Text GLabel 3350 3250 0    50   Input ~ 0
+Text GLabel 3350 3250 0    50   Output ~ 0
 SIDETONE
 Text GLabel 3350 3350 0    50   Input ~ 0
 RIGHT_PADDLE
 Text GLabel 4350 3150 2    50   Input ~ 0
 LEFT_PADDLE
-Text GLabel 4350 3050 2    50   Input ~ 0
+Text GLabel 4350 3050 2    50   UnSpc ~ 0
 GND2
 Text GLabel 3350 3050 0    50   Input ~ 0
 VDD2
@@ -855,11 +849,11 @@ Wire Wire Line
 	3650 3250 3350 3250
 Wire Wire Line
 	3650 3350 3350 3350
-Text GLabel 8500 1550 2    50   Input ~ 0
+Text GLabel 8500 1550 2    50   Output ~ 0
 LEFT_PADDLE
-Text GLabel 8500 1250 2    50   Input ~ 0
+Text GLabel 8500 1250 2    50   Output ~ 0
 RIGHT_PADDLE
-Text GLabel 8500 850  2    50   Input ~ 0
+Text GLabel 8500 850  2    50   UnSpc ~ 0
 GND2
 $Comp
 L Device:R R17
@@ -909,7 +903,7 @@ F 4 "C17513" V 7450 3700 50  0001 C CNN "JLCPCB"
 	1    7450 3700
 	1    0    0    -1  
 $EndComp
-Text GLabel 7450 4400 0    50   Input ~ 0
+Text GLabel 7300 4400 0    50   UnSpc ~ 0
 GND2
 Wire Wire Line
 	7450 3550 7450 3500
@@ -994,21 +988,21 @@ Text GLabel 1200 5100 0    50   Input ~ 0
 SIDETONE
 Wire Wire Line
 	1800 5100 1800 5150
-Text GLabel 1200 5950 0    50   Input ~ 0
+Text GLabel 1200 5950 0    50   UnSpc ~ 0
 GND2
 Wire Wire Line
 	1800 5850 1800 5950
-Text GLabel 10450 1150 2    50   Input ~ 0
+Text GLabel 10550 1150 2    50   UnSpc ~ 0
 GND2
 Wire Wire Line
 	4150 5100 5100 5100
-Text GLabel 4150 5200 2    50   Input ~ 0
+Text GLabel 4150 5200 2    50   Output ~ 0
 KEY_SW1
-Text GLabel 4150 5300 2    50   Input ~ 0
+Text GLabel 4150 5300 2    50   Output ~ 0
 KEY_SW2
-Text GLabel 4150 5400 2    50   Input ~ 0
+Text GLabel 4150 5400 2    50   Output ~ 0
 KEY_SW3
-Text GLabel 3150 5800 0    50   Input ~ 0
+Text GLabel 3150 5800 0    50   Output ~ 0
 KEY_SW4
 Text GLabel 5750 2950 0    50   Input ~ 0
 KEY_SW1
@@ -1018,9 +1012,9 @@ Text GLabel 5750 3150 0    50   Input ~ 0
 KEY_SW3
 Text GLabel 5750 3250 0    50   Input ~ 0
 KEY_SW4
-Text GLabel 6150 3850 3    50   Input ~ 0
+Text GLabel 6150 3850 3    50   UnSpc ~ 0
 GND2
-Text GLabel 7350 2050 0    50   Input ~ 0
+Text GLabel 7350 2050 0    50   Output ~ 0
 PBNET
 Wire Wire Line
 	7350 2050 7450 2050
@@ -1040,13 +1034,13 @@ Wire Wire Line
 	6550 3250 7050 3250
 Text GLabel 5750 3350 0    50   Input ~ 0
 KEY
-Text GLabel 6550 3350 2    50   Input ~ 0
+Text GLabel 6550 3350 2    50   Output ~ 0
 KEY_OUT
 Text GLabel 10350 1550 2    50   Input ~ 0
 KEY_OUT
 Text GLabel 5750 3450 0    50   Input ~ 0
 BACKLIGHT
-Text GLabel 6550 3450 2    50   Input ~ 0
+Text GLabel 6550 3450 2    50   Output ~ 0
 LIGHT_OUT
 Text GLabel 9900 6200 2    50   Input ~ 0
 LIGHT_OUT
@@ -1066,7 +1060,7 @@ F 4 "C1710" H 7750 2550 50  0001 C CNN "JLCPCB"
 	1    7750 2550
 	0    -1   -1   0   
 $EndComp
-Text GLabel 7950 2550 2    50   Input ~ 0
+Text GLabel 7950 2550 2    50   UnSpc ~ 0
 GND2
 Wire Wire Line
 	7450 2550 7650 2550
@@ -1100,13 +1094,13 @@ F 3 "~" H 950 800 50  0001 C CNN
 	1    950  800 
 	-1   0    0    1   
 $EndComp
-Text GLabel 1150 800  2    50   Input ~ 0
+Text GLabel 1150 800  2    50   UnSpc ~ 0
 GND1
-Text GLabel 5900 5100 2    50   Input ~ 0
+Text GLabel 5900 5100 2    50   UnSpc ~ 0
 GND2
-Text GLabel 5900 5550 2    50   Input ~ 0
+Text GLabel 5900 5550 2    50   UnSpc ~ 0
 GND2
-Text GLabel 5900 6000 2    50   Input ~ 0
+Text GLabel 5900 6000 2    50   UnSpc ~ 0
 GND2
 Connection ~ 5100 6900
 Wire Wire Line
@@ -1149,18 +1143,18 @@ F 3 "~" H 5700 6650 50  0001 C CNN
 	1    5700 6450
 	-1   0    0    -1  
 $EndComp
-Text GLabel 5900 7350 2    50   Input ~ 0
+Text GLabel 5900 7350 2    50   UnSpc ~ 0
 GND2
-Text GLabel 5900 6900 2    50   Input ~ 0
+Text GLabel 5900 6900 2    50   UnSpc ~ 0
 GND2
-Text GLabel 5900 6450 2    50   Input ~ 0
+Text GLabel 5900 6450 2    50   UnSpc ~ 0
 GND2
 Text Notes 7200 7050 0    50   ~ 0
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
 Text Notes 7400 7500 0    50   ~ 0
 FT-817 Buddy Schematic Rev4
 Text Notes 8150 7650 0    50   ~ 0
-5 December 2020
+20 March 2021
 Text Notes 10600 7650 0    50   ~ 0
 4
 Wire Wire Line
@@ -1271,17 +1265,17 @@ Wire Wire Line
 	7350 6050 6900 6050
 Wire Wire Line
 	6900 5250 7350 5250
-Text GLabel 7350 5150 0    50   Input ~ 0
+Text GLabel 7350 5150 0    50   UnSpc ~ 0
 GND2
-Text GLabel 4150 5500 2    50   Input ~ 0
+Text GLabel 4150 5500 2    50   BiDi ~ 0
 EXP_SDA
-Text GLabel 4150 5600 2    50   Input ~ 0
+Text GLabel 4150 5600 2    50   Output ~ 0
 EXP_SCL
-Text GLabel 7350 4850 0    50   Input ~ 0
+Text GLabel 7350 4850 0    50   BiDi ~ 0
 EXP_SDA
 Text GLabel 7350 4950 0    50   Input ~ 0
 EXP_SCL
-Text GLabel 7350 5050 0    50   Input ~ 0
+Text GLabel 7350 5050 0    50   Output ~ 0
 EXP_SQW
 Text GLabel 3150 4700 0    50   Input ~ 0
 EXP_SQW
@@ -1311,4 +1305,35 @@ Wire Wire Line
 	6900 5250 6900 6050
 Text Notes 7200 6800 0    118  ~ 0
 FT-817 Buddy
+NoConn ~ 4150 3350
+NoConn ~ 3150 5700
+NoConn ~ 4150 5800
+NoConn ~ 4150 5700
+NoConn ~ 4150 4900
+NoConn ~ 4150 4600
+NoConn ~ 4150 4500
+NoConn ~ 3550 4100
+NoConn ~ 3650 6100
+NoConn ~ 10350 1350
+NoConn ~ 10350 1450
+NoConn ~ 7900 1350
+NoConn ~ 7900 1450
+NoConn ~ 6550 2850
+NoConn ~ 5750 3550
+NoConn ~ 5750 3650
+NoConn ~ 6550 3650
+NoConn ~ 6550 3550
+Text GLabel 3150 5600 0    50   Input ~ 0
+SW7
+Text GLabel 3150 5500 0    50   Input ~ 0
+SW8
+Text GLabel 3150 5400 0    50   Input ~ 0
+SW9
+Wire Wire Line
+	10450 1150 10550 1150
+Connection ~ 10450 1150
+Wire Wire Line
+	7300 4400 7450 4400
+Wire Wire Line
+	4850 1400 4850 1500
 $EndSCHEMATC
