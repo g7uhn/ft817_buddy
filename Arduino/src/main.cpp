@@ -28,6 +28,7 @@
 //#define EEPROM_WRITES
 
 // uncomment the line below if you have fitted the Sparkfun DS1307 RTC module to the expansion header
+// if no RTC module is fitted, this line should be commented out
 #define RTC_FITTED
 
 // Include libraries
